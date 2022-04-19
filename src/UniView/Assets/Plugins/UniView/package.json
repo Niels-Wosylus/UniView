@@ -2,7 +2,7 @@
     "name": "com.wosylus.uniview",
     "displayName": "UniView",
     "author": { "name": "Niels Wosylus", "url": "" },
-    "version": "2.3.1",
+    "version": "0.1.0",
     "unity": "2021.2",
     "description": "Easily build views",
     "keywords": [ "UniView" ],
