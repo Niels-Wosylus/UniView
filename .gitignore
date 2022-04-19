@@ -9,6 +9,7 @@ src/UniView/[Bb]uild/
 src/UniView/[Bb]uilds/
 src/UniView/[Ll]ogs/
 src/UniView/[Mm]emoryCaptures/
+src/UniView/.idea
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -60,3 +61,5 @@ crashlytics-build.properties
 
 
 *.dwlt
+
+src/UniView/Wosylus.UniView.csproj.DotSettings
