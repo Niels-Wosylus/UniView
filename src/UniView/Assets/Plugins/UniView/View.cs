@@ -24,7 +24,7 @@ namespace Wosylus.UniView
         public T Target { get; private set; }
 
         [FormerlySerializedAs("_viewComponents")]
-        [ReadOnly]
+        //[ReadOnly]
         [SerializeField] private MonoBehaviour[] _children = Array.Empty<MonoBehaviour>();
         private bool _didInitialize;
 
