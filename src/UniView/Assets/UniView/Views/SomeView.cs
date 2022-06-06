@@ -4,35 +4,43 @@ using UniView.Exposure;
 
 namespace UniView.Views
 {
-    public class Observable<T> : IObservable<T>
+    public class TestContent : MonoBehaviour
     {
+        public Reactive<float> Health;
+        public Reactive<float> Armor;
+    }
+    
+    public class Reactive<T> : IObservable<T>
+    {
+        public T Value { get; }
+        
         public IDisposable Subscribe(IObserver<T> observer)
         {
             throw new NotImplementedException();
         }
     }
 
-    public class SomeView : View<MonoBehaviour>
+    public class SomeView : View<object>
     {
-        private Observable<float> _observable;
+        private Reactive<float> _reactive;
 
-        protected override void Setup(ISetup<MonoBehaviour> setup)
+        protected override void Setup(ISetup<object> setup)
         {
-            setup.Content("Name", x => x.name).RefreshContinuously();
-            setup.Content("Health", _observable);
+            setup.Content("Name", x => "").RefreshContinuously();
+            setup.ReactiveContent("Health", x => _reactive);
         }
     }
 
     public static class UniRxExtensions
     {
-        public static void RefreshFromObservable<T, TExposed>(this IContentChannelSetup<T> setup, IObservable<TExposed> observable)
+        public static void RefreshFromObservable<T, TExposed>(this IContentChannelSetup<T> setup, Func<T, IObservable<TExposed>> observable)
         {
             setup.OverrideController(null); //etc
         }
 
-        public static void Content<T, TExposed>(this ISetup<T> setup, string key, IObservable<TExposed> observable) //<--- should be ReactiveProperty
+        public static void ReactiveContent<T, TExposed>(this ISetup<T> setup, string key, Func<T, Reactive<TExposed>> reactive)
         {
-            setup.Content(key, arg => default(TExposed)).RefreshFromObservable(observable); //replace func with property getter
+            setup.Content(key, arg => default(TExposed)).RefreshFromObservable(reactive);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace UniView.Exposure
     public interface IContentChannel<in T>
     {
         string Key { get; }
+        public Type OutputType { get; }
         void RegisterConsumer(IContentConsumer consumer);
         void Update(T content);
         void Clear();
@@ -14,6 +15,7 @@ namespace UniView.Exposure
     public class ContentChannel<T, TOut> : IContentChannel<T>
     {
         public string Key { get; }
+        public Type OutputType => typeof(TOut);
         
         private readonly List<IContentConsumer> _consumers = new List<IContentConsumer>(8);
         private readonly Func<T, TOut> _converter;

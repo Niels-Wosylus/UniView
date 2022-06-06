@@ -11,6 +11,13 @@ namespace UniView.Exposure
 
         public static IDisposable Register(Action callback)
         {
+            #if UNITY_EDITOR
+            if (Updater == null && Application.isPlaying)
+                new GameObject().AddComponent<GlobalViewUpdater>();
+            
+            return new Subscription(callback);
+            #endif
+            
             if (Updater == null)
                 new GameObject().AddComponent<GlobalViewUpdater>();
             

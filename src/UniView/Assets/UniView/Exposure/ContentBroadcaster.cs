@@ -13,7 +13,7 @@ namespace UniView.Exposure
         void Register(IContentConsumer consumer, string key);
     }
 
-    public interface IContentBroadcaster<T> : IDisplay<T>, ISetup<T>, IContentConsumerRegistry, IDisposable
+    public interface IContentBroadcaster<T> : IDisplay<T>, ISetup<T>, IContentConsumerRegistry, IContentProducer, IDisposable
     {
         void OverrideContentChannelController(string key, IContentChannelController<T> controller);
     }
@@ -81,6 +81,26 @@ namespace UniView.Exposure
             foreach (var controller in _activeControllers)
             {
                 controller.Dispose();
+            }
+        }
+
+        public bool KeyIsAvailable(string key, IContentConsumer consumer)
+        {
+            if (!_channels.ContainsKey(key)) 
+                return false;
+
+            var channel = _channels[key];
+            var type = channel.OutputType;
+            return consumer.CanConsume(type);
+        }
+
+        public IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer)
+        {
+            foreach (var (key, channel) in _channels)
+            {
+                var type = channel.OutputType;
+                if (consumer.CanConsume(type))
+                    yield return key;
             }
         }
     }
