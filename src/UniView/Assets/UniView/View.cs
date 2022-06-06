@@ -3,23 +3,29 @@ using UniView.Exposure;
 
 namespace UniView
 {
-    public abstract class View<T> : ViewElement<T>, IContentProducer
+    public abstract class ViewBase : ViewElementBase, IContentProducer
     {
-        protected sealed override void Display(T content)
+
+    }
+    
+    public abstract class View<T> : ViewBase, IDisplay<T>
+    {
+        public override void Consume<TContent>(TContent content)
         {
-            throw new System.NotImplementedException();
+            if(content is T match)
+                Display(match);
+        }
+
+        public void Display(T content)
+        {
+            throw new NotImplementedException();
         }
         
         public sealed override void Clear()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
         
-        protected abstract void ExposeContents();
-        
-        protected IContentExposure Expose<TExposed>(string key, Func<T, TExposed> exposer)
-        {
-            throw new System.NotImplementedException();
-        }
+        protected abstract void Setup(ISetup<T> setup);
     }
 }

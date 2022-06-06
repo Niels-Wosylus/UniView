@@ -3,30 +3,25 @@ using System.Collections.Generic;
 
 namespace UniView.Exposure
 {
-    public interface IContentExposure
+    public interface IContentChannel<in T>
     {
-        void Continuously();
-    }
-    
-    public interface IContentChannel : IContentExposure, IDisposable
-    {
+        string Key { get; }
         void RegisterConsumer(IContentConsumer consumer);
-        void RegisterDisposable(IDisposable subscription);
-        void RefreshConsumers();
-        void ClearConsumers();
+        void Update(T content);
+        void Clear();
     }
     
-    public class ContentChannel<TIn, TOut> : IContentChannel
+    public class ContentChannel<T, TOut> : IContentChannel<T>
     {
+        public string Key { get; }
+        
         private readonly List<IContentConsumer> _consumers = new List<IContentConsumer>(8);
-        private readonly List<IDisposable> _disposables = new List<IDisposable>();
-        private readonly Func<TIn, TOut> _function;
-        private readonly IContentProvider<TIn> _contentProvider;
+        private readonly Func<T, TOut> _converter;
 
-        public ContentChannel(IContentProvider<TIn> contentProvider, Func<TIn, TOut> function)
+        public ContentChannel(string key, Func<T, TOut> converter)
         {
-            _contentProvider = contentProvider;
-            _function = function;
+            Key = key;
+            _converter = converter;
         }
 
         public void RegisterConsumer(IContentConsumer consumer)
@@ -34,41 +29,21 @@ namespace UniView.Exposure
             _consumers.Add(consumer);
         }
 
-        public void RegisterDisposable(IDisposable subscription)
+        public void Update(T content)
         {
-            _disposables.Add(subscription);
-        }
-
-        public void RefreshConsumers()
-        {
-            var input = _contentProvider.GetContent();
-            var content = _function.Invoke(input);
+            var converted = _converter.Invoke(content);
             foreach (var consumer in _consumers)
             {
-                consumer.Consume(content);
+                consumer.Consume(converted);
             }
         }
 
-        public void ClearConsumers()
+        public void Clear()
         {
             foreach (var consumer in _consumers)
             {
                 consumer.Clear();
             }
-        }
-
-        public void Dispose()
-        {
-            foreach (var disposable in _disposables)
-            {
-                disposable.Dispose();
-            }
-        }
-        
-        public void Continuously()
-        {
-            var subscription = GlobalViewUpdater.Register(RefreshConsumers);
-            RegisterDisposable(subscription);
         }
     }
 }

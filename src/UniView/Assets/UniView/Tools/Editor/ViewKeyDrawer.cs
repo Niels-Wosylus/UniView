@@ -1,6 +1,8 @@
-﻿using Unity.VisualScripting;
+﻿using System;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UniView.Exposure;
 
 namespace UniView.Tools.Editor
 {
@@ -40,8 +42,17 @@ namespace UniView.Tools.Editor
             return 0;
         }
 
-        private string[] GetChoices(SerializedProperty property)
+        private static string[] GetChoices(SerializedProperty property)
         {
+            var owner = property.serializedObject;
+            var ownerObject = owner.targetObject;
+            var consumer = ownerObject.GetComponent<IContentConsumer>();
+            if (consumer == null)
+            {
+                Debug.LogWarning($"{nameof(ViewKeyAttribute)} should only appear on string fields belonging to a class implementing {nameof(IContentConsumer)}");
+                return new[] { "" };
+            }
+                
             return new[] { "", "Choice 1", "Choice 2" };
         }
     }

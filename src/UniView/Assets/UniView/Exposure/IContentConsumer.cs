@@ -2,7 +2,7 @@
 {
     public interface IContentConsumer
     {
-        void RegisterIn(IConsumerRegistry registry);
+        void RegisterIn(IContentConsumerRegistry registry);
         void Consume<TContent>(TContent content);
         void Clear();
     }
