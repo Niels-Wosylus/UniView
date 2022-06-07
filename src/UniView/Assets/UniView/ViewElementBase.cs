@@ -8,6 +8,7 @@ namespace UniView
 {
     public abstract class ViewElementBase : MonoBehaviour, IContentConsumer
     {
+        [Header("Source")]
         [ReadOnly]
         [SerializeField] private ViewBase _parent = default;
         public ViewBase Parent => _parent;
@@ -24,11 +25,18 @@ namespace UniView
             registry.Register(this, _key);
         }
 
+#if UNITY_EDITOR
         public virtual void OnValidate()
         {
+            SetParent();
+        }
+
+        private void SetParent()
+        {
             _parent = this.FindParent();
-            if(_parent != null)
+            if (_parent != null)
                 _parent.OnValidate();
         }
+#endif
     }
 }
