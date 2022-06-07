@@ -11,16 +11,13 @@ namespace UniView.Binding
 
         public static IDisposable Register(Action callback)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (Updater == null && Application.isPlaying)
                 new GameObject().AddComponent<GlobalViewUpdater>();
-            
-            return new Subscription(callback);
-            #endif
-            
+#else
             if (Updater == null)
                 new GameObject().AddComponent<GlobalViewUpdater>();
-            
+#endif
             return new Subscription(callback);
         }
 
