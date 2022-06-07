@@ -8,6 +8,7 @@ using UniView.Utilities;
 
 namespace UniView
 {
+    [DisallowMultipleComponent]
     public abstract class ViewBase : ViewElementBase, IContentProducer
     {
         [Header("Children")]
