@@ -2,6 +2,7 @@
 using UnityEngine;
 using UniView.Binding;
 using UniView.Tools;
+using UniView.Utilities;
 
 namespace UniView
 {
@@ -22,9 +23,11 @@ namespace UniView
             registry.Register(this, _key);
         }
 
-        private void OnValidate()
+        public virtual void OnValidate()
         {
-            Debug.Log($"Validating {name}");
+            _parent = this.FindParent();
+            if(_parent != null)
+                _parent.OnValidate();
         }
     }
 }

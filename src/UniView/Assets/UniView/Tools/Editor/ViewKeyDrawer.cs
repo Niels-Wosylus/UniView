@@ -10,7 +10,7 @@ namespace UniView.Tools.Editor
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUI.GetPropertyHeight(property, label, true) + 50;
+            return EditorGUI.GetPropertyHeight(property, label, true);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -18,7 +18,7 @@ namespace UniView.Tools.Editor
             EditorGUI.BeginProperty(position, label, property);
     
             var choices = GetChoices(property);
-            var popupPos = position.ShrinkBy(new RectOffset(0, 0, 40, 0));
+            var popupPos = position;//.ShrinkBy(new RectOffset(0, 0, 40, 0));
 
             if (choices.Length > 0)
             {

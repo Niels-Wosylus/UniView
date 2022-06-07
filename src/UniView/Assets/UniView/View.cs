@@ -4,12 +4,6 @@ using UniView.Binding;
 
 namespace UniView
 {
-    public abstract class ViewBase : ViewElementBase, IContentProducer
-    {
-        public abstract bool KeyIsAvailable(string key, IContentConsumer consumer);
-        public abstract IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer);
-    }
-    
     public abstract class View<T> : ViewBase, IDisplay<T>
     {
         private ContentBroadcaster<T> _broadcaster;
