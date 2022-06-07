@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UniView.Exposure
+namespace UniView.Binding
 {
     public interface IContentChannel<in T>
     {

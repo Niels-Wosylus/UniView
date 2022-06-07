@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using UniView.Exposure;
+using UniView.Binding;
 
 namespace UniView
 {

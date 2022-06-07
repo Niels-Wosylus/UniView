@@ -1,4 +1,4 @@
-﻿namespace UniView.Exposure
+﻿namespace UniView.Binding
 {
     public interface IContentChannelSetup<T>
     {

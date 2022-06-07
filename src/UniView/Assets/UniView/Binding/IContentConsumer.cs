@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UniView.Exposure
+namespace UniView.Binding
 {
     public interface IContentConsumer
     {
