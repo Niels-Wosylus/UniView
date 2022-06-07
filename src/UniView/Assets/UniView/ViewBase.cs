@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UniView.Binding;
+using UniView.Tools;
 using UniView.Utilities;
 
 namespace UniView
 {
     public abstract class ViewBase : ViewElementBase, IContentProducer
     {
+        [ReadOnly]
         [SerializeField] private ViewElementBase[] _elements = Array.Empty<ViewElementBase>();
         
         public abstract bool KeyIsAvailable(string key, IContentConsumer consumer);

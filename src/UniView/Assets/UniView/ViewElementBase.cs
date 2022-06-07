@@ -8,6 +8,7 @@ namespace UniView
 {
     public abstract class ViewElementBase : MonoBehaviour, IContentConsumer
     {
+        [ReadOnly]
         [SerializeField] private ViewBase _parent = default;
         public ViewBase Parent => _parent;
         
