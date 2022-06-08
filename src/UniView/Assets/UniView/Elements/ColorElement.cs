@@ -51,7 +51,7 @@ namespace UniView.Elements
             }
         }
 
-        protected override void OnValidate()
+        public override void OnValidate()
         {
             base.OnValidate();
             GetOriginalColors();

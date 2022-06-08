@@ -33,7 +33,7 @@ namespace UniView
         }
 
 #if UNITY_EDITOR
-        protected virtual void OnValidate()
+        public virtual void OnValidate()
         {
             SetParent();
         }
