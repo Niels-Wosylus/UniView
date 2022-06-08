@@ -469,7 +469,7 @@ GameObject:
   - component: {fileID: 269426039}
   - component: {fileID: 269426040}
   m_Layer: 5
-  m_Name: '[View] Person View (1)'
+  m_Name: '[View] Person'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1072,7 +1072,7 @@ GameObject:
   - component: {fileID: 1294451198}
   - component: {fileID: 1294451199}
   m_Layer: 5
-  m_Name: '[View] Person View'
+  m_Name: '[View] Person'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
