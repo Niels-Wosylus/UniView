@@ -58,6 +58,7 @@ namespace UniView.Binding
 
             var channel = _channels[key];
             channel.RegisterConsumer(consumer);
+            controller.Init(channel);
         }
 
         public void Display(T content)
