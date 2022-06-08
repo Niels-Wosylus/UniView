@@ -20,13 +20,20 @@ namespace UniView
         public abstract bool CanConsume(Type contentType);
         public abstract void Clear();
         
+        protected virtual void OnDispose() { }
+        
         public void RegisterIn(IContentConsumerRegistry registry)
         {
             registry.Register(this, _key);
         }
 
+        protected virtual void OnDestroy()
+        {
+            OnDispose();
+        }
+
 #if UNITY_EDITOR
-        public virtual void OnValidate()
+        protected virtual void OnValidate()
         {
             SetParent();
         }

@@ -27,7 +27,7 @@ namespace UniView
         }
         
 #if UNITY_EDITOR
-        public override void OnValidate()
+        protected override void OnValidate()
         {
             base.OnValidate();
             SetElements();
