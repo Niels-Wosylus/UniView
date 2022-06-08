@@ -10,7 +10,7 @@ namespace UniView.Views
         {
             setup.Content("First Name", x => x.FirstName);
             setup.Content("Last Name", x => x.LastName);
-            setup.Content("Age", x => x.Age);
+            setup.Content("Age", x => x.Age).Continuously();
         }
 
         [ContextMenu("Display Charles")]
@@ -37,6 +37,24 @@ namespace UniView.Views
             };
 
             Display(content);
+        }
+
+        [ContextMenu("Clear")]
+        private void DoClear()
+        {
+            Clear();
+        }
+
+        [ContextMenu("Refresh")]
+        private void DoRefresh()
+        {
+            Refresh();
+        }
+
+        private void Update()
+        {
+            if (DisplayedContent != null)
+                DisplayedContent.Age += 1;
         }
     }
 

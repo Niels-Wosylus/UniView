@@ -2,7 +2,7 @@
 {
     public interface IContentChannelSetup<T>
     {
-        void RefreshContinuously();
+        void Continuously();
         void OverrideController(IContentChannelController<T> controller);
     }
 
@@ -17,7 +17,7 @@
             _overrider = overrider;
         }
 
-        public void RefreshContinuously()
+        public void Continuously()
         {
             OverrideController(new RefreshContinuously<T>());
         }

@@ -7,9 +7,9 @@ namespace UniView
     public abstract class View<T> : ViewBase, IDisplay<T>
     {
         private static readonly IEqualityComparer<T> EqualityComparer = EqualityComparer<T>.Default;
+        public T DisplayedContent { get; private set; } = default;
+        public bool IsDisplayingContent { get; private set; }
         private ContentBroadcaster<T> _broadcaster;
-        private T _displayedContent = default;
-        private bool _isDisplayingContent;
 
         public override void Consume<TContent>(TContent content)
         {
@@ -26,7 +26,7 @@ namespace UniView
         {
             EnsureInitialization();
 
-            if (EqualityComparer.Equals(content, _displayedContent))
+            if (EqualityComparer.Equals(content, DisplayedContent))
                 return;
             
             if (content == null)
@@ -35,33 +35,33 @@ namespace UniView
                 return;
             }
 
-            OnClear(_displayedContent);
-            _displayedContent = content;
-            _isDisplayingContent = true;
+            OnClear(DisplayedContent);
+            DisplayedContent = content;
+            IsDisplayingContent = true;
             OnDisplay(content);
             _broadcaster.Display(content);
         }
 
         public void Refresh()
         {
-            if (!_isDisplayingContent)
+            if (!IsDisplayingContent)
                 return;
             
-            _broadcaster.Display(_displayedContent);
+            _broadcaster.Display(DisplayedContent);
         }
 
         public sealed override void Clear()
         {
             EnsureInitialization();
             
-            if (!_isDisplayingContent)
+            if (!IsDisplayingContent)
                 return;
 
-            if(_displayedContent != null)
-                OnClear(_displayedContent);
+            if(DisplayedContent != null)
+                OnClear(DisplayedContent);
             
-            _isDisplayingContent = false;
-            _displayedContent = default;
+            IsDisplayingContent = false;
+            DisplayedContent = default;
             _broadcaster.Clear();
         }
         

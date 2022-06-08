@@ -26,7 +26,7 @@ namespace UniView.Views
 
         protected override void Setup(ISetup<object> setup)
         {
-            setup.Content("Name", x => "").RefreshContinuously();
+            setup.Content("Name", x => "").Continuously();
             setup.ReactiveContent("Health", x => _reactive);
         }
     }
