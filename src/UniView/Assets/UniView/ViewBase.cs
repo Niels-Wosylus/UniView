@@ -11,13 +11,21 @@ namespace UniView
     [DisallowMultipleComponent]
     public abstract class ViewBase : ViewElementBase, IContentProducer
     {
-        [Header("Children")]
+        [Header("Consumers")]
         [ReadOnly]
         [SerializeField] private ViewElementBase[] _elements = Array.Empty<ViewElementBase>();
-        
+
         public abstract bool KeyIsAvailable(string key, IContentConsumer consumer);
         public abstract IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer);
 
+        protected void RegisterElementsIn(IContentConsumerRegistry registry)
+        {
+            foreach (var element in _elements)
+            {
+                element.RegisterIn(registry);
+            }
+        }
+        
 #if UNITY_EDITOR
         public override void OnValidate()
         {
