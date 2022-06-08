@@ -44,7 +44,7 @@ namespace UniView.Binding
         public void Init(IContentChannel<T> channel)
         {
             _channel = channel;
-            _subscription = GlobalViewUpdater.Register(() =>
+            _subscription = GlobalUpdate.Register(() =>
             {
                 if(!_isCleared)
                     _channel.Update(_content);

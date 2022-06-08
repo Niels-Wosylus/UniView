@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UniView.Binding;
 
@@ -11,6 +12,11 @@ namespace UniView.Views
             setup.Content("First Name", x => x.FirstName);
             setup.Content("Last Name", x => x.LastName);
             setup.Content("Age", x => x.Age).Continuously();
+        }
+
+        private void Start()
+        {
+            DisplayCharles();
         }
 
         [ContextMenu("Display Charles")]

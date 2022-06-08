@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace UniView.Binding
 {
-    public class GlobalViewUpdater : MonoBehaviour
+    public class GlobalUpdate : MonoBehaviour
     {
-        private static GlobalViewUpdater Updater { get; set; }
+        private static GlobalUpdate Updater { get; set; }
         private static readonly List<Action> Callbacks = new List<Action>(128); 
 
         public static IDisposable Register(Action callback)
         {
 #if UNITY_EDITOR
             if (Updater == null && Application.isPlaying)
-                new GameObject().AddComponent<GlobalViewUpdater>();
+                new GameObject().AddComponent<GlobalUpdate>();
 #else
             if (Updater == null)
                 new GameObject().AddComponent<GlobalViewUpdater>();
