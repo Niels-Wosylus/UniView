@@ -8,7 +8,7 @@
             while (transform != null)                            
             {                                                 
                 var view = transform.GetComponent<ViewBase>();
-                if (view != null && !ReferenceEquals(view, viewElement)) 
+                if (view != null && view != viewElement) 
                     return view;
                 
                 transform = transform.parent;                       

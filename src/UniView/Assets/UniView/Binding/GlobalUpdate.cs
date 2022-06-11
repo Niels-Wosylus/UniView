@@ -31,8 +31,9 @@ namespace UniView.Binding
 
         private void Update()
         {
-            foreach (var callback in Callbacks)
+            for (var i = 0; i < Callbacks.Count; i++)
             {
+                var callback = Callbacks[i];
                 callback.Invoke();
             }
         }

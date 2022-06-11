@@ -5,9 +5,12 @@ namespace UniView.Views
 {
     public class TestView : View<TestViewModel>
     {
+        private bool _isHovered;
+        
         protected override void Setup(ISetup<TestViewModel> setup)
         {
             setup.Content("[Displayed Content]", x => x);
+            setup.Content("[Is Hovered]", _ => _isHovered).Continuously();
             setup.Content("First Name", x => x.FirstName);
             setup.Content("Last Name", x => x.LastName);
             setup.Content("Age", x => x.Age).Continuously();
@@ -60,6 +63,9 @@ namespace UniView.Views
         {
             if (DisplayedContent != null)
                 DisplayedContent.Age += 1;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+                _isHovered = !_isHovered;
         }
     }
 
