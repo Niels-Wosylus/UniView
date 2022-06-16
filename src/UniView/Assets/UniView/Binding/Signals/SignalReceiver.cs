@@ -13,14 +13,14 @@ namespace UniView.Binding.Signals
     {
         private readonly Dictionary<string, IInputChannel> _channels = new Dictionary<string, IInputChannel>();
 
-        public void Consume<TSignal>(string key, TSignal content)
+        public void Consume<TSignal>(string key, TSignal signal)
         {
             if (!_channels.ContainsKey(key))
                 return;
 
             var channel = _channels[key];
             if (channel is IInputChannel<TSignal> match)
-                match.Handle(content);
+                match.Receive(signal);
         }
 
         public bool CanConsume(string key, Type signalType)

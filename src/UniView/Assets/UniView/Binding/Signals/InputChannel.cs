@@ -10,7 +10,7 @@ namespace UniView.Binding.Signals
     
     public interface IInputChannel<T> : IInputChannel
     {
-        void Handle(T signal);
+        void Receive(T signal);
         void AddHandler(Action<T> handler);
     }
     
@@ -20,7 +20,7 @@ namespace UniView.Binding.Signals
 
         public Type SignalType => typeof(T);
         
-        public void Handle(T signal)
+        public void Receive(T signal)
         {
             foreach (var handler in _handlers)
             {
