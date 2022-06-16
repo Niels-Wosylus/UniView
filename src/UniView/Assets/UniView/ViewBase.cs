@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UniView.Binding;
 using UniView.Binding.Content;
+using UniView.Binding.Signals;
 using UniView.Tools;
 using UniView.Utilities;
 

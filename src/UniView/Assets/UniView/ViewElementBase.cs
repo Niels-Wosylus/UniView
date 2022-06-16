@@ -2,6 +2,7 @@
 using UnityEngine;
 using UniView.Binding;
 using UniView.Binding.Content;
+using UniView.Binding.Signals;
 using UniView.Tools;
 using UniView.Utilities;
 
@@ -16,7 +17,7 @@ namespace UniView
         
         [ViewKey]
         [SerializeField] private string _key;
-        
+
         public abstract void Consume<TContent>(TContent content);
         public abstract bool CanConsume(Type contentType);
         public abstract void Clear();
