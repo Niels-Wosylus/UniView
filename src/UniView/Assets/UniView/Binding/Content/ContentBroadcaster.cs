@@ -8,9 +8,9 @@ namespace UniView.Binding.Content
         void Register(IContentConsumer consumer, string key);
     }
 
-    public interface IContentBroadcaster<T> : IDisplay<T>, ISetup<T>, IContentConsumerRegistry, IContentSource, IDisposable
+    public interface IContentBroadcaster<T> : IDisplay<T>, IContentConsumerRegistry, IContentSource, IDisposable
     {
-        //IContentChannelSetup<T> SetupContent<TExposed>(string key, Func<T, TExposed> function);
+        IContentChannelSetup<T> SetupContent<TExposed>(string key, Func<T, TExposed> function);
         void OverrideContentChannelController(string key, IContentChannelController<T> controller);
     }
     
@@ -25,7 +25,7 @@ namespace UniView.Binding.Content
         private readonly HashSet<IContentChannelController<T>> _activeControllers
             = new HashSet<IContentChannelController<T>>();
 
-        public IContentChannelSetup<T> Content<TExposed>(string key, Func<T, TExposed> function)
+        public IContentChannelSetup<T> SetupContent<TExposed>(string key, Func<T, TExposed> function)
         {
             if (_channels.ContainsKey(key))
                 throw new Exception($"Key {key} is already being used to expose content");

@@ -10,7 +10,7 @@ namespace UniView
         private static readonly IEqualityComparer<T> EqualityComparer = EqualityComparer<T>.Default;
         public T DisplayedContent { get; private set; } = default;
         public bool IsDisplayingContent { get; private set; }
-        private ContentBroadcaster<T> _broadcaster;
+        private ViewBinder<T> _binder;
 
         public override void Consume<TContent>(TContent content)
         {
@@ -40,7 +40,7 @@ namespace UniView
             DisplayedContent = content;
             IsDisplayingContent = true;
             OnDisplay(content);
-            _broadcaster.Display(content);
+            _binder.Display(content);
         }
 
         public void Refresh()
@@ -48,7 +48,7 @@ namespace UniView
             if (!IsDisplayingContent)
                 return;
             
-            _broadcaster.Display(DisplayedContent);
+            _binder.Display(DisplayedContent);
         }
 
         public sealed override void Clear()
@@ -63,7 +63,7 @@ namespace UniView
             
             IsDisplayingContent = false;
             DisplayedContent = default;
-            _broadcaster.Clear();
+            _binder.Clear();
         }
         
         protected abstract void Setup(ISetup<T> setup);
@@ -74,12 +74,12 @@ namespace UniView
 
         private void EnsureInitialization()
         {
-            if (_broadcaster != null)
+            if (_binder != null)
                 return;
             
-            _broadcaster = new ContentBroadcaster<T>();
-            Setup(_broadcaster);
-            RegisterElementsIn(_broadcaster);
+            _binder = new ViewBinder<T>();
+            Setup(_binder);
+            RegisterElementsIn(_binder);
             OnInitialize();
         }
         
@@ -88,20 +88,20 @@ namespace UniView
         public override bool KeyIsAvailable(string key, IContentConsumer consumer)
         {
             EnsureBroadcaster();
-            return _broadcaster.KeyIsAvailable(key, consumer);
+            return _binder.KeyIsAvailable(key, consumer);
         }
 
         public override IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer)
         {
             EnsureBroadcaster();
-            return _broadcaster.GetAvailableKeysFor(consumer);
+            return _binder.GetAvailableKeysFor(consumer);
         }
         
         private void EnsureBroadcaster()
         {
-            if (_broadcaster != null) return;
-            _broadcaster = new ContentBroadcaster<T>();
-            Setup(_broadcaster);
+            if (_binder != null) return;
+            _binder = new ViewBinder<T>();
+            Setup(_binder);
         }
 
         #endregion
