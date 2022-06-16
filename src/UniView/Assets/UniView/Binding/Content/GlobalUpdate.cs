@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UniView.Binding
+namespace UniView.Binding.Content
 {
     public class GlobalUpdate : MonoBehaviour
     {

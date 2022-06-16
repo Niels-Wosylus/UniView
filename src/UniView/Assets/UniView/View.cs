@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UniView.Binding;
+using UniView.Binding.Content;
 
 namespace UniView
 {

@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace UniView.Binding
+namespace UniView.Binding.Content
 {
     public interface IContentConsumer
     {
-        void RegisterIn(IContentConsumerRegistry registry);
         void Consume<TContent>(TContent content);
         bool CanConsume(Type contentType);
         void Clear();

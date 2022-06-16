@@ -1,4 +1,5 @@
 ﻿using System;
+using UniView.Binding.Content;
 
 namespace UniView.Binding
 {

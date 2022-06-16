@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UniView.Binding;
+using UniView.Binding.Content;
 using UniView.Tools;
 using UniView.Utilities;
 

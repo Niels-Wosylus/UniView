@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UniView.Binding
+namespace UniView.Binding.Content
 {
     public interface IContentConsumerRegistry
     {
@@ -10,6 +10,7 @@ namespace UniView.Binding
 
     public interface IContentBroadcaster<T> : IDisplay<T>, ISetup<T>, IContentConsumerRegistry, IContentSource, IDisposable
     {
+        //IContentChannelSetup<T> SetupContent<TExposed>(string key, Func<T, TExposed> function);
         void OverrideContentChannelController(string key, IContentChannelController<T> controller);
     }
     

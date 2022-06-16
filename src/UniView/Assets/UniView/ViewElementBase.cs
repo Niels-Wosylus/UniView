@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UniView.Binding;
+using UniView.Binding.Content;
 using UniView.Tools;
 using UniView.Utilities;
 

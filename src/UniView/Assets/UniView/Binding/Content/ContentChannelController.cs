@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UniView.Binding
+namespace UniView.Binding.Content
 {
     public interface IContentChannelController<T>
     {

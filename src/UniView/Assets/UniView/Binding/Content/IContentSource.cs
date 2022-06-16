@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UniView.Binding
+namespace UniView.Binding.Content
 {
     public interface IContentSource
     {
