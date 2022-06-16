@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UniView;
 using UniView.Binding;
+using UniView.Binding.Signals;
 
 public class TestView : View<TestViewModel>
 {
     private bool _isHovered;
-        
+    private ISignalSender<string> _clickedOutput;
+
     protected override void Setup(ISetup<TestViewModel> setup)
     {
         setup.Content("[Displayed Content]", x => x);
@@ -13,6 +15,14 @@ public class TestView : View<TestViewModel>
         setup.Content("First Name", x => x.FirstName);
         setup.Content("Last Name", x => x.LastName);
         setup.Content("Age", x => x.Age).Continuously();
+        
+        setup.Input<string>("Clicked string", OnClickedString);
+        setup.Output("Clicked string", out _clickedOutput);
+    }
+
+    private void OnClickedString(string clickedName)
+    {
+        Debug.Log(clickedName);
     }
 
     private void Start()
@@ -65,6 +75,9 @@ public class TestView : View<TestViewModel>
 
         if (Input.GetKeyDown(KeyCode.Space))
             _isHovered = !_isHovered;
+        
+        if (Input.GetKeyDown(KeyCode.Return))
+            _clickedOutput.Send("Some signal");
     }
 }
 

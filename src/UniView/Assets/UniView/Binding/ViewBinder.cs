@@ -6,7 +6,8 @@ using UniView.Binding.Signals;
 namespace UniView.Binding
 {
     public interface IViewBinder<T> : ISetup<T>, 
-        IDisplay<T>, IContentConsumerRegistry, IContentSource
+        IDisplay<T>, IContentConsumerRegistry, IContentSource, 
+        ISignalSource, ISignalConsumer
     {
         
     }
@@ -14,12 +15,27 @@ namespace UniView.Binding
     public class ViewBinder<T> : IViewBinder<T>
     {
         private readonly IContentBroadcaster<T> _contentBroadcaster = new ContentBroadcaster<T>();
-        private readonly ISignalBroadcaster _signalBroadcaster;
-        private readonly ISignalReceiver _signalReceiver;
+        private readonly ISignalBroadcaster _signalBroadcaster = new SignalBroadcaster();
+        private readonly ISignalReceiver _signalReceiver = new SignalReceiver();
         
         public IContentChannelSetup<T> Content<TExposed>(string key, Func<T, TExposed> function)
         {
             return _contentBroadcaster.SetupContent(key, function);
+        }
+
+        public void Input<TSignal>(string key, Action<TSignal> handler)
+        {
+            _signalReceiver.SetupInput(key, handler);
+        }
+
+        public ISignalSender<TSignal> Output<TSignal>(string key)
+        {
+            return _signalBroadcaster.SetupOutput<TSignal>(key);
+        }
+
+        public void Output<TSignal>(string key, out ISignalSender<TSignal> output)
+        {
+            output = _signalBroadcaster.SetupOutput<TSignal>(key);
         }
 
         public void Register(IContentConsumer consumer, string key)
@@ -45,6 +61,16 @@ namespace UniView.Binding
         public void Clear()
         {
             _contentBroadcaster.Clear();
+        }
+
+        public void Consume<TSignal>(string key, TSignal signal)
+        {
+            _signalReceiver.Consume(key, signal);
+        }
+
+        public bool CanConsume(string key, Type signalType)
+        {
+            return _signalReceiver.CanConsume(key, signalType);
         }
     }
 }

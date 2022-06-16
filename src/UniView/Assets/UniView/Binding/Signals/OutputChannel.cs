@@ -3,12 +3,26 @@ using System.Collections.Generic;
 
 namespace UniView.Binding.Signals
 {
-    public interface IOutputChannel<in T>
+    public interface ISignalSender<in T>
+    {
+        void Send(T signal);
+    }
+
+    public class NullSignalSender<T> : ISignalSender<T>
+    {
+        public void Send(T signal) { }
+    }
+
+    public interface IOutputChannel
     {
         string Key { get; }
         public Type OutputType { get; }
         void RegisterConsumer(ISignalConsumer consumer);
-        void Send(T signal);
+    }
+    
+    public interface IOutputChannel<in T> : IOutputChannel, ISignalSender<T>
+    {
+        
     }
     
     public class OutputChannel<T> : IOutputChannel<T>
