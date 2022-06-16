@@ -2,7 +2,7 @@
 
 namespace UniView.Binding
 {
-    public interface IContentProducer
+    public interface IContentSource
     {
         public bool KeyIsAvailable(string key, IContentConsumer consumer);
         IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer);

@@ -3,17 +3,12 @@ using System.Collections.Generic;
 
 namespace UniView.Binding
 {
-    public interface ISetup<T>
-    {
-        IContentChannelSetup<T> Content<TExposed>(string key, Func<T, TExposed> function);
-    }
-    
     public interface IContentConsumerRegistry
     {
         void Register(IContentConsumer consumer, string key);
     }
 
-    public interface IContentBroadcaster<T> : IDisplay<T>, ISetup<T>, IContentConsumerRegistry, IContentProducer, IDisposable
+    public interface IContentBroadcaster<T> : IDisplay<T>, ISetup<T>, IContentConsumerRegistry, IContentSource, IDisposable
     {
         void OverrideContentChannelController(string key, IContentChannelController<T> controller);
     }

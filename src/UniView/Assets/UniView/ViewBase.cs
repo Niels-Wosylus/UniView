@@ -9,7 +9,7 @@ using UniView.Utilities;
 namespace UniView
 {
     [DisallowMultipleComponent]
-    public abstract class ViewBase : ViewElementBase, IContentProducer
+    public abstract class ViewBase : ViewElementBase, IContentSource
     {
         [Header("Consumers")]
         [ReadOnly]
