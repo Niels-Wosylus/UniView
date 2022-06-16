@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Wosylus.UniView.Binding;
 
 namespace Wosylus.UniView.Views
 {
@@ -16,7 +17,7 @@ namespace Wosylus.UniView.Views
         /// <summary>
         /// Gets the object that the View displays
         /// </summary>
-        public T Item => View?.Target;
+        public T Item => View?.DisplayedContent;
     }
     
     /// <summary>
@@ -25,28 +26,30 @@ namespace Wosylus.UniView.Views
     /// <typeparam name="T">The type of item to display</typeparam>
     public abstract class CollectionView<T> : View<IList<T>> where T : class
     {
-        public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> ViewClicked;
-        public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> HoveredViewChanged;
-        public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> PressedViewChanged;
+        // public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> ViewClicked;
+        // public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> HoveredViewChanged;
+        // public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> PressedViewChanged;
 
         public View<T> HoveredView { get; private set; }
         public View<T> PressedView { get; private set; }
 
-        public T HoveredItem => HoveredView?.Target;
-        public T PressedItem => PressedView?.Target;
+        public T HoveredItem => HoveredView?.DisplayedContent;
+        public T PressedItem => PressedView?.DisplayedContent;
 
         
         protected abstract IList<View<T>> Views { get; }
 
-        protected override void ExposeProperties() { }
+        protected override void Setup(ISetup<IList<T>> setup) 
+        {
+        }
 
         protected override void OnInitialize()
         {
             foreach (var view in Views)
             {
-                view.Clicked += ItemViewOnClicked;
-                view.IsHoveredChanged += ItemViewOnIsHoveredChanged;
-                view.IsPressedChanged += ItemViewOnIsPressedChanged;
+                // view.Clicked += ItemViewOnClicked;
+                // view.IsHoveredChanged += ItemViewOnIsHoveredChanged;
+                // view.IsPressedChanged += ItemViewOnIsPressedChanged;
             }
         }
 
@@ -54,9 +57,9 @@ namespace Wosylus.UniView.Views
         {
             foreach (var view in Views)
             {
-                view.Clicked -= ItemViewOnClicked;
-                view.IsHoveredChanged -= ItemViewOnIsHoveredChanged;
-                view.IsPressedChanged -= ItemViewOnIsPressedChanged;
+                // view.Clicked -= ItemViewOnClicked;
+                // view.IsHoveredChanged -= ItemViewOnIsHoveredChanged;
+                // view.IsPressedChanged -= ItemViewOnIsPressedChanged;
             }
         }
 
@@ -74,11 +77,11 @@ namespace Wosylus.UniView.Views
                 else view.Clear();
             }
             
-            if(HoveredItem != prevHoveredItem)
-                HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
-            
-            if(PressedItem != prevPressedItem)
-                PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
+            // if(HoveredItem != prevHoveredItem)
+            //     HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
+            //
+            // if(PressedItem != prevPressedItem)
+            //     PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
         }
 
         private void ItemViewOnIsHoveredChanged(object view, bool isHovered)
@@ -88,13 +91,13 @@ namespace Wosylus.UniView.Views
             {
                 if (HoveredView == entry) return;
                 HoveredView = entry;
-                HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
+                //HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
             }
             else
             {
                 if (HoveredView != entry) return;
                 HoveredView = null;
-                HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
+                //HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
             }
         }
         
@@ -105,21 +108,21 @@ namespace Wosylus.UniView.Views
             {
                 if (PressedView == entry) return;
                 PressedView = entry;
-                PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
+                //PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
             }
             else
             {
                 if (PressedView != entry) return;
                 PressedView = null;
-                PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
+                //PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
             }
         }
 
-        private void ItemViewOnClicked(object view, ClickedEventArgs info)
-        {
-            var entry = (View<T>) view;
-            ViewClicked?.Invoke(this, new CollectionViewEventArgs<T>(entry));
-        }
+        // private void ItemViewOnClicked(object view, ClickedEventArgs info)
+        // {
+        //     var entry = (View<T>) view;
+        //     //ViewClicked?.Invoke(this, new CollectionViewEventArgs<T>(entry));
+        // }
     }
 
     /// <summary>

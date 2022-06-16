@@ -10,23 +10,6 @@ namespace Wosylus.UniView.Elements
         [SerializeField] private Graphic[] _graphics = default;
         [SerializeField, HideInInspector] private Color[] _originalColors = default;
 
-        protected override void OnDisplay(Color target)
-        {
-            switch (_mode)
-            {
-                case ColorMode.Direct:
-                    ApplyDirect(target);
-                    break;
-                
-                case ColorMode.Multiply:
-                    ApplyMultiply(target);
-                    break;
-                
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
         private void ApplyDirect(Color target)
         {
             foreach (var graphic in _graphics)
@@ -43,7 +26,24 @@ namespace Wosylus.UniView.Elements
             }
         }
 
-        protected override void OnClear()
+        public override void Display(Color content)
+        {
+            switch (_mode)
+            {
+                case ColorMode.Direct:
+                    ApplyDirect(content);
+                    break;
+                
+                case ColorMode.Multiply:
+                    ApplyMultiply(content);
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public override void Clear()
         {
             for (int i = 0; i < _graphics.Length; i++)
             {
@@ -51,7 +51,7 @@ namespace Wosylus.UniView.Elements
             }
         }
 
-        protected override void OnValidate()
+        public override void OnValidate()
         {
             base.OnValidate();
             GetOriginalColors();

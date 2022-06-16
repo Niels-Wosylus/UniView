@@ -10,20 +10,29 @@ namespace Wosylus.UniView.Elements
         [SerializeField] private Graphic[] _graphics = default;
         [SerializeField, HideInInspector] private float[] _originalAlphas = default;
 
-        protected override void OnDisplay(float target)
+        public override void Display(float content)
         {
             switch (_mode)
             {
                 case ColorMode.Direct:
-                    ApplyDirect(target);
+                    ApplyDirect(content);
                     break;
                 
                 case ColorMode.Multiply:
-                    ApplyMultiply(target);
+                    ApplyMultiply(content);
                     break;
                 
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public override void Clear()
+        {
+            for (int i = 0; i < _graphics.Length; i++)
+            {
+                var graphic = _graphics[i];
+                graphic.color = BuildColor(graphic.color, _originalAlphas[i]);
             }
         }
 
@@ -44,16 +53,7 @@ namespace Wosylus.UniView.Elements
             }
         }
 
-        protected override void OnClear()
-        {
-            for (int i = 0; i < _graphics.Length; i++)
-            {
-                var graphic = _graphics[i];
-                graphic.color = BuildColor(graphic.color, _originalAlphas[i]);
-            }
-        }
-
-        protected override void OnValidate()
+        public override void OnValidate()
         {
             base.OnValidate();
             GetOriginalAlphas();

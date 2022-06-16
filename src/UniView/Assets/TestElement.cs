@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UniView;
+using Wosylus.UniView;
 
 [RequireComponent(typeof(Text))]
 public class TestElement : ViewElement<string, int>

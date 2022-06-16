@@ -8,18 +8,18 @@ namespace Wosylus.UniView.Elements
     {
         [SerializeField] private Image _imageRenderer = default;
 
-        protected override void OnDisplay(Sprite target)
+        public override void Display(Sprite content)
         {
             _imageRenderer.enabled = true;
-            _imageRenderer.sprite = target;
+            _imageRenderer.sprite = content;
         }
 
-        protected override void OnClear()
+        public override void Clear()
         {
             _imageRenderer.enabled = false;
             _imageRenderer.sprite = null;
         }
-
+        
         private void Reset()
         {
             _imageRenderer = GetComponent<Image>();

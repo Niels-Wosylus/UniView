@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UniView;
-using UniView.Binding;
-using UniView.Binding.Signals;
+using Wosylus.UniView;
+using Wosylus.UniView.Binding;
+using Wosylus.UniView.Binding.Signals;
 
 public class TestView : View<TestViewModel>
 {
