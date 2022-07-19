@@ -52,7 +52,13 @@ namespace Wosylus.UniView.Tools.Editor
             }
 
             var parent = consumer.Parent;
-            return parent == null ? new[] { "" } : parent.GetAvailableKeysFor(consumer).ToArray();
+            if (parent == null)
+                return new[] { "" };
+            
+            var choices = parent.GetAvailableKeysFor(consumer).ToArray();
+            return choices.Length > 0 
+                ? choices 
+                : new[] { "" };
         }
     }
 }
