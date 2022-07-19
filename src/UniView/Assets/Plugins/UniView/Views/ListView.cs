@@ -9,7 +9,7 @@ namespace Wosylus.UniView.Views
     /// Displays a collection of items
     /// </summary>
     /// <typeparam name="T">The type of item to display</typeparam>
-    public abstract class ListView<T> : View<IList<T>> where T : class
+    public abstract class ListView<T> : View<IList<T>>
     {
         [SerializeField] private View<T> _viewPrefab = default;
         [SerializeField] private Transform _viewParent = default;
@@ -17,22 +17,6 @@ namespace Wosylus.UniView.Views
 
         protected override void Setup(ISetup<IList<T>> setup) 
         {
-        }
-
-        protected override void OnInitialize()
-        {
-            foreach (var view in _children)
-            {
-
-            }
-        }
-
-        protected override void OnDispose()
-        {
-            foreach (var view in _children)
-            {
-
-            }
         }
 
         protected override void OnDisplay(IList<T> target)
