@@ -87,17 +87,17 @@ namespace Wosylus.UniView
         
         public override bool KeyIsAvailable(string key, IContentConsumer consumer)
         {
-            EnsureBroadcaster();
+            EnsureBinder();
             return _binder.KeyIsAvailable(key, consumer);
         }
 
         public override IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer)
         {
-            EnsureBroadcaster();
+            EnsureBinder();
             return _binder.GetAvailableKeysFor(consumer);
         }
         
-        private void EnsureBroadcaster()
+        private void EnsureBinder()
         {
             if (_binder != null) return;
             _binder = new ViewBinder<T>();

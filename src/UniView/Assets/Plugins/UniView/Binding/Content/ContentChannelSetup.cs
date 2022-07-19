@@ -1,9 +1,11 @@
-﻿namespace Wosylus.UniView.Binding.Content
+﻿using System;
+
+namespace Wosylus.UniView.Binding.Content
 {
     public interface IContentChannelSetup<T>
     {
         void Continuously();
-        void OverrideController(IContentChannelController<T> controller);
+        void WithController(IContentChannelController<T> controller);
     }
 
     public class ContentChannelSetup<T> : IContentChannelSetup<T>
@@ -19,10 +21,10 @@
 
         public void Continuously()
         {
-            OverrideController(new RefreshContinuously<T>());
+            WithController(new RefreshContinuously<T>());
         }
 
-        public void OverrideController(IContentChannelController<T> controller)
+        public void WithController(IContentChannelController<T> controller)
         {
             var key = _channel.Key;
             _overrider.OverrideContentChannelController(key, controller);
