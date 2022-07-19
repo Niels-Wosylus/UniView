@@ -24,6 +24,9 @@ namespace Wosylus.UniView
         
         public void RegisterIn(IContentConsumerRegistry registry)
         {
+            if (string.IsNullOrEmpty(_key))
+                return;
+            
             registry.Register(this, _key);
         }
 
