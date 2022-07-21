@@ -1,4 +1,6 @@
-﻿namespace Wosylus.UniView.Elements
+﻿using System;
+
+namespace Wosylus.UniView.Elements
 {
     public class SetActiveElement : ViewElement<bool>
     {
@@ -9,6 +11,7 @@
 
         public override void Clear()
         {
+            gameObject.SetActive(false);
         }
     }
 }
