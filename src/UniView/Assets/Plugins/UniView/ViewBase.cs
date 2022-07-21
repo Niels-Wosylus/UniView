@@ -10,6 +10,8 @@ namespace Wosylus.UniView
     [DisallowMultipleComponent]
     public abstract class ViewBase : ViewElementBase, IContentSource
     {
+        protected override string InspectorPrefix => "View";
+
         [ReadOnly]
         [SerializeField] private ViewElementBase[] _elements = Array.Empty<ViewElementBase>();
 

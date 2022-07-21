@@ -6,6 +6,8 @@ namespace Wosylus.UniView.Elements
     [RequireComponent(typeof(Image))]
     public sealed class ImageElement : ViewElement<Sprite>
     {
+        protected override string InspectorPrefix => "Image";
+        
         [SerializeField] private Image _imageRenderer = default;
 
         public override void Display(Sprite content)

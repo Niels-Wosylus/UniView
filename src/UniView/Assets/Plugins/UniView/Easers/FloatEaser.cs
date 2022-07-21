@@ -5,6 +5,8 @@ namespace Wosylus.UniView.Easers
 {
     public class FloatEaser : View<float, int, bool>
     {
+        protected override string InspectorPrefix => "Easer";
+        
         [Header("Input")]
         [SerializeField] private float _inputMin = 0f;
         [SerializeField] private float _inputMax = 1f;

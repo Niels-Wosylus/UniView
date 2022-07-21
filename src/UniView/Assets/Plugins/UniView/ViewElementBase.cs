@@ -14,6 +14,8 @@ namespace Wosylus.UniView
         public ViewKey ViewKey => _source;
         public ViewBase Parent => _source.Source;
 
+        protected abstract string InspectorPrefix { get; }
+        
         public abstract void Consume<TContent>(TContent content);
         public abstract bool CanConsume(Type contentType);
         public abstract void Clear();
@@ -36,8 +38,13 @@ namespace Wosylus.UniView
 #if UNITY_EDITOR
         public virtual void OnValidate()
         {
-            if (Parent != null)
-                Parent.OnValidate();
+            if (Parent == null)
+                return;
+            
+            if (!string.IsNullOrEmpty(InspectorPrefix))
+                name = $"[{InspectorPrefix}] {_source.Key}";
+
+            Parent.OnValidate();
         }
 #endif
     }
