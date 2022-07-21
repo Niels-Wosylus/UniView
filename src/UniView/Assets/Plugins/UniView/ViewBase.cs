@@ -4,14 +4,12 @@ using System.Linq;
 using UnityEngine;
 using Wosylus.UniView.Binding.Content;
 using Wosylus.UniView.Tools;
-using Wosylus.UniView.Utilities;
 
 namespace Wosylus.UniView
 {
     [DisallowMultipleComponent]
     public abstract class ViewBase : ViewElementBase, IContentSource
     {
-        [Header("Consumers")]
         [ReadOnly]
         [SerializeField] private ViewElementBase[] _elements = Array.Empty<ViewElementBase>();
 
@@ -37,7 +35,7 @@ namespace Wosylus.UniView
         {
             var elements = GetComponentsInChildren<ViewElementBase>()
                 .Where(child => !ReferenceEquals(child, this))
-                .Where(child => ReferenceEquals(child.FindParent(), this));
+                .Where(child => ReferenceEquals(child.Parent, this));
 
             _elements = elements.ToArray();
         }

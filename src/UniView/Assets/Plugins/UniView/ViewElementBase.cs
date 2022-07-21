@@ -2,19 +2,17 @@
 using UnityEngine;
 using Wosylus.UniView.Binding.Content;
 using Wosylus.UniView.Tools;
-using Wosylus.UniView.Utilities;
 
 namespace Wosylus.UniView
 {
     public abstract class ViewElementBase : MonoBehaviour, IContentConsumer
     {
-        [Header("Source")]
         [ViewKey]
         [SerializeField]
-        private ViewKey _viewKey = default;
+        private ViewKey _source = default;
 
-        public ViewKey ViewKey => _viewKey;
-        public ViewBase Parent => _viewKey.Source;
+        public ViewKey ViewKey => _source;
+        public ViewBase Parent => _source.Source;
 
         public abstract void Consume<TContent>(TContent content);
         public abstract bool CanConsume(Type contentType);
@@ -24,10 +22,10 @@ namespace Wosylus.UniView
         
         public void RegisterIn(IContentConsumerRegistry registry)
         {
-            if (string.IsNullOrEmpty(_viewKey.Key))
+            if (string.IsNullOrEmpty(_source.Key))
                 return;
             
-            registry.Register(this, _viewKey.Key);
+            registry.Register(this, _source.Key);
         }
 
         protected virtual void OnDestroy()
