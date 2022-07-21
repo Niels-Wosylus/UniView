@@ -25,17 +25,10 @@ namespace Wosylus.UniView.Tools.Editor
             if (choices.Length > 0)
             {
                 var choiceIndex = GetChoiceIndex(property, choices);
-                var choiceStrings = choices.Select(x => $"{x.Source.name} :: {x.Key}").ToArray();
+                var choiceStrings = choices.Select(x => $"{x.Source.name} -> {x.Key}").ToArray();
                 choiceIndex = EditorGUI.Popup(position, label.text, choiceIndex, choiceStrings);
                 var key = choices[choiceIndex];
-                
-                var owner = property.serializedObject;
-                var ownerObject = owner.targetObject;
-                if (ownerObject is not ViewElementBase consumer)
-                    return;
-
-                consumer.Key = key;
-                consumer.OnValidate();
+                key.AssignToProperty(property);
             }
 
             EditorGUI.EndProperty();
@@ -60,7 +53,7 @@ namespace Wosylus.UniView.Tools.Editor
             if (ownerObject is not ViewElementBase consumer)
                 return 0;
 
-            var key = consumer.Key;
+            var key = consumer.ViewKey;
             
             for (int i = 0; i < choices.Length; i++)
             {

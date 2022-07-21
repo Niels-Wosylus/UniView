@@ -9,15 +9,12 @@ namespace Wosylus.UniView
     public abstract class ViewElementBase : MonoBehaviour, IContentConsumer
     {
         [Header("Source")]
-        [ReadOnly]
-        [SerializeField] private ViewBase _parent = default;
-        public ViewBase Parent => _parent;
-        
         [ViewKey]
-        [SerializeField] private string _key;
+        [SerializeField]
+        private ViewKey _viewKey = default;
 
-        [ViewKey]
-        public ViewKey Key = default;
+        public ViewKey ViewKey => _viewKey;
+        public ViewBase Parent => _viewKey.Source;
 
         public abstract void Consume<TContent>(TContent content);
         public abstract bool CanConsume(Type contentType);
@@ -27,10 +24,10 @@ namespace Wosylus.UniView
         
         public void RegisterIn(IContentConsumerRegistry registry)
         {
-            if (string.IsNullOrEmpty(_key))
+            if (string.IsNullOrEmpty(_viewKey.Key))
                 return;
             
-            registry.Register(this, _key);
+            registry.Register(this, _viewKey.Key);
         }
 
         protected virtual void OnDestroy()
@@ -41,44 +38,9 @@ namespace Wosylus.UniView
 #if UNITY_EDITOR
         public virtual void OnValidate()
         {
-            SetParent();
-        }
-
-        private void SetParent()
-        {
-            _parent = Key.Source;
-            //_parent = this.FindParent();
-            if (_parent != null)
-                _parent.OnValidate();
+            if (Parent != null)
+                Parent.OnValidate();
         }
 #endif
-    }
-
-    [Serializable]
-    public struct ViewKey
-    {
-        public readonly string Key;
-        public readonly ViewBase Source;
-
-        public ViewKey(ViewBase source, string key)
-        {
-            Source = source;
-            Key = key;
-        }
-
-        public bool Equals(ViewKey other)
-        {
-            return Key == other.Key && Equals(Source, other.Source);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is ViewKey other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Key, Source);
-        }
     }
 }
