@@ -74,6 +74,6 @@ namespace Wosylus.UniView.Elements
             if (graphic != null) _graphics = new[] { graphic };
         }
 
-        private Color BuildColor(Color color, float alpha) => new Color(color.r, color.g, color.b, alpha);
+        private static Color BuildColor(Color color, float alpha) => new Color(color.r, color.g, color.b, alpha);
     }
 }

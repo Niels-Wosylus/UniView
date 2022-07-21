@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Wosylus.UniView.Tools.Editor
@@ -14,6 +15,9 @@ namespace Wosylus.UniView.Tools.Editor
         
         private static void OnHierarchyChanged()
         {
+            if (Application.isPlaying)
+                return;
+            
             var openScene = SceneManager.GetActiveScene();
             var roots = openScene.GetRootGameObjects();
             var views = new List<ViewElementBase>();
