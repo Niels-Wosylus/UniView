@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,13 +20,22 @@ namespace Wosylus.UniView.Tools.Editor
         {
             EditorGUI.BeginProperty(position, label, property);
     
-            var choices = GetChoices(property);
+            var choices = GetAvailableKeys(property);
 
             if (choices.Length > 0)
             {
                 var choiceIndex = GetChoiceIndex(property, choices);
-                choiceIndex = EditorGUI.Popup(position, label.text, choiceIndex, choices);
-                property.stringValue = choices[choiceIndex];
+                var choiceStrings = choices.Select(x => $"{x.Source.name} :: {x.Key}").ToArray();
+                choiceIndex = EditorGUI.Popup(position, label.text, choiceIndex, choiceStrings);
+                var key = choices[choiceIndex];
+                
+                var owner = property.serializedObject;
+                var ownerObject = owner.targetObject;
+                if (ownerObject is not ViewElementBase consumer)
+                    return;
+
+                consumer.Key = key;
+                consumer.OnValidate();
             }
 
             EditorGUI.EndProperty();
@@ -42,6 +53,48 @@ namespace Wosylus.UniView.Tools.Editor
             return 0;
         }
 
+        private static int GetChoiceIndex(SerializedProperty property, ViewKey[] choices)
+        {
+            var owner = property.serializedObject;
+            var ownerObject = owner.targetObject;
+            if (ownerObject is not ViewElementBase consumer)
+                return 0;
+
+            var key = consumer.Key;
+            
+            for (int i = 0; i < choices.Length; i++)
+            {
+                if (choices[i].Equals(key))
+                    return i;
+            }
+
+            return 0;
+        }
+
+        private static ViewKey[] GetAvailableKeys(SerializedProperty property)
+        {
+            var owner = property.serializedObject;
+            var ownerObject = owner.targetObject;
+            if (ownerObject is not ViewElementBase consumer)
+                return Array.Empty<ViewKey>();
+
+            var transform = consumer.transform;
+            var sources = new List<ViewBase>();
+            while (transform != null)                            
+            {                                                 
+                var source = transform.GetComponent<ViewBase>();
+                if (source != null && source != consumer) 
+                    sources.Add(source);
+                
+                transform = transform.parent;                       
+            }
+
+            return (from source in sources
+                let keys = source.GetAvailableKeysFor(consumer)
+                from key in keys
+                select new ViewKey(source, key)).ToArray();
+        }
+        
         private static string[] GetChoices(SerializedProperty property)
         {
             var owner = property.serializedObject;

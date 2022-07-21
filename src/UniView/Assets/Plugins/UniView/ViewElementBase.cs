@@ -16,6 +16,9 @@ namespace Wosylus.UniView
         [ViewKey]
         [SerializeField] private string _key;
 
+        [ViewKey]
+        public ViewKey Key = default;
+
         public abstract void Consume<TContent>(TContent content);
         public abstract bool CanConsume(Type contentType);
         public abstract void Clear();
@@ -43,10 +46,39 @@ namespace Wosylus.UniView
 
         private void SetParent()
         {
-            _parent = this.FindParent();
+            _parent = Key.Source;
+            //_parent = this.FindParent();
             if (_parent != null)
                 _parent.OnValidate();
         }
 #endif
+    }
+
+    [Serializable]
+    public struct ViewKey
+    {
+        public readonly string Key;
+        public readonly ViewBase Source;
+
+        public ViewKey(ViewBase source, string key)
+        {
+            Source = source;
+            Key = key;
+        }
+
+        public bool Equals(ViewKey other)
+        {
+            return Key == other.Key && Equals(Source, other.Source);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ViewKey other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Key, Source);
+        }
     }
 }
