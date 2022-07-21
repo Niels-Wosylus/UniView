@@ -10,8 +10,7 @@ public class TestView : View<TestViewModel>
 
     protected override void Setup(ISetup<TestViewModel> setup)
     {
-        setup.Content("[Displayed Content]", x => x);
-        setup.Content("[Is Hovered]", _ => _isHovered).Continuously();
+        setup.Content("<<Is Hovered>>", _ => _isHovered).Continuously();
         setup.Content("First Name", x => x.FirstName);
         setup.Content("Last Name", x => x.LastName);
         setup.Content("Age", x => x.Age).Continuously();

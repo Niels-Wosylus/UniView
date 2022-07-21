@@ -6,6 +6,8 @@ namespace Wosylus.UniView.Elements
     [RequireComponent(typeof(TextMeshProUGUI))]
     public sealed class TextElement : ViewElement<string, int, float>
     {
+        protected override string InspectorPrefix => "Text";
+        
         [SerializeField] private TextMeshProUGUI _textRenderer = default;
         private int? _displayedInt;
         private float? _displayedFloat;

@@ -4,6 +4,8 @@ namespace Wosylus.UniView
 {
     public abstract class ViewElement<T> : ViewElementBase, IDisplay<T>
     {
+        protected override string InspectorPrefix => "";
+        
         public override void Consume<TContent>(TContent content)
         {
             if(content is T match)

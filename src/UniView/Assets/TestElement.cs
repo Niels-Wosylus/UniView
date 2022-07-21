@@ -5,6 +5,8 @@ using Wosylus.UniView;
 [RequireComponent(typeof(Text))]
 public class TestElement : ViewElement<string, int>
 {
+    protected override string InspectorPrefix => "Text";
+    
     [SerializeField] private Text _textRenderer = default;
     private int? _displayedInt;
         
