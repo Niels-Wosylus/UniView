@@ -14,8 +14,7 @@ namespace Wosylus.UniView
 
         [ReadOnly]
         [SerializeField] private ViewElementBase[] _elements = Array.Empty<ViewElementBase>();
-
-        public abstract bool KeyIsAvailable(string key, IContentConsumer consumer);
+        
         public abstract IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer);
 
         protected void RegisterElementsIn(IContentConsumerRegistry registry)

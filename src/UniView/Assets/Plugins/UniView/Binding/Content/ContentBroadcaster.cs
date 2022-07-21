@@ -81,16 +81,6 @@ namespace Wosylus.UniView.Binding.Content
             }
         }
 
-        public bool KeyIsAvailable(string key, IContentConsumer consumer)
-        {
-            if (!_channels.ContainsKey(key)) 
-                return false;
-
-            var channel = _channels[key];
-            var type = channel.OutputType;
-            return consumer.CanConsume(type);
-        }
-
         public IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer)
         {
             foreach (var (key, channel) in _channels)

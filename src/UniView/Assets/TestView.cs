@@ -61,12 +61,6 @@ public class TestView : View<TestViewModel>
         Clear();
     }
 
-    [ContextMenu("Refresh")]
-    private void DoRefresh()
-    {
-        Refresh();
-    }
-
     private void Update()
     {
         if (DisplayedContent != null)

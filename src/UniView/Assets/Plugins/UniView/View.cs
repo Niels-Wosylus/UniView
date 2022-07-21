@@ -43,14 +43,6 @@ namespace Wosylus.UniView
             _binder.Display(content);
         }
 
-        public void Refresh()
-        {
-            if (!IsDisplayingContent)
-                return;
-            
-            _binder.Display(DisplayedContent);
-        }
-
         public sealed override void Clear()
         {
             EnsureInitialization();
@@ -84,13 +76,6 @@ namespace Wosylus.UniView
         }
         
         #region EDITOR
-        
-        public override bool KeyIsAvailable(string key, IContentConsumer consumer)
-        {
-            EnsureBinder();
-            return _binder.KeyIsAvailable(key, consumer);
-        }
-
         public override IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer)
         {
             EnsureBinder();
@@ -103,9 +88,7 @@ namespace Wosylus.UniView
             _binder = new ViewBinder<T>();
             Setup(_binder);
         }
-
         #endregion
-
     }
 
     public abstract class View<T, T1> : View<T>

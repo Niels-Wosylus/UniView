@@ -43,11 +43,6 @@ namespace Wosylus.UniView.Binding
             _contentBroadcaster.Register(consumer, key);
         }
 
-        public bool KeyIsAvailable(string key, IContentConsumer consumer)
-        {
-            return _contentBroadcaster.KeyIsAvailable(key, consumer);
-        }
-
         public IEnumerable<string> GetAvailableKeysFor(IContentConsumer consumer)
         {
             return _contentBroadcaster.GetAvailableKeysFor(consumer);
