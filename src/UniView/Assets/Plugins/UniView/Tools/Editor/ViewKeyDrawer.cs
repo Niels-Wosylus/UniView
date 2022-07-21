@@ -7,6 +7,8 @@ namespace Wosylus.UniView.Tools.Editor
     [CustomPropertyDrawer(typeof(ViewKeyAttribute))]
     public class ViewKeyDrawer : PropertyDrawer
     {
+        private static readonly string[] NoChoices = { "" };
+    
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUI.GetPropertyHeight(property, label, true);
@@ -28,7 +30,7 @@ namespace Wosylus.UniView.Tools.Editor
             EditorGUI.EndProperty();
         }
 
-        private int GetChoiceIndex(SerializedProperty property, string[] choices)
+        private static int GetChoiceIndex(SerializedProperty property, string[] choices)
         {
             var value = property.stringValue;
             for (int i = 0; i < choices.Length; i++)
@@ -48,17 +50,15 @@ namespace Wosylus.UniView.Tools.Editor
             if (consumer == null)
             {
                 Debug.LogWarning($"{nameof(ViewKeyAttribute)} should only appear on string fields belonging to a class implementing {nameof(ViewElementBase)}");
-                return new[] { "" };
+                return NoChoices;
             }
 
             var parent = consumer.Parent;
             if (parent == null)
-                return new[] { "" };
+                return NoChoices;
             
             var choices = parent.GetAvailableKeysFor(consumer).ToArray();
-            return choices.Length > 0 
-                ? choices 
-                : new[] { "" };
+            return choices.Length > 0 ? choices : NoChoices;
         }
     }
 }
