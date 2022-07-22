@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using Wosylus.UniView.Binding;
-
-namespace Wosylus.UniView.Easers
+﻿namespace Wosylus.UniView.Easers
 {
     /*
     public class FloatEaser : View<float, int, bool>
