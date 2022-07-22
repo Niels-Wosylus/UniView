@@ -3,6 +3,7 @@ using Wosylus.UniView.Binding;
 
 namespace Wosylus.UniView.Easers
 {
+    /*
     public class FloatEaser : View<float, int, bool>
     {
         [Header("Input")]
@@ -50,5 +51,5 @@ namespace Wosylus.UniView.Easers
                     EasedValue = TargetValue;
             }
         }
-    }
+    }*/
 }

@@ -1,5 +1,6 @@
 ﻿using Wosylus.UniView;
 using Wosylus.UniView.Binding;
+using Wosylus.UniView.Binding.Content.Processors;
 
 public class PartyView : View<PartyViewModel>
 {
