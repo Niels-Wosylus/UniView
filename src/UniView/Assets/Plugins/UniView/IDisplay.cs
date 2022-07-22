@@ -1,13 +1,9 @@
 ﻿namespace Wosylus.UniView
 {
-    // public interface IDisplayInfo<out T>
-    // {
-    //     T DisplayedContent { get; }
-    //     bool IsDisplayingContent { get; }   
-    // }
-    
-    public interface IDisplay<in T>// : IDisplayInfo<T>
+    public interface IDisplay<T>
     {
+        // T DisplayedContent { get; }
+        // bool IsDisplayingContent { get; }   
         void Display(T content);
         void Clear();
     }

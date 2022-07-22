@@ -37,15 +37,15 @@ namespace Wosylus.UniView.Binding.Content.Processors
                 process.EndedWith(this);
                 return;
             }
-
-            var output = Process(input);
-            process.ContinueWith(output);
+            
+            var converted = Process(input);
+            process.ContinueWith(converted);
         }
 
         protected abstract TOut Process(TOut input);
     }
     
-    public abstract class ViewContentProcessor<TIn1, TOut> : ViewContentProcessor<TOut>
+    public abstract class ViewContentProcessor<TOut, TIn1> : ViewContentProcessor<TOut>
     {
         public override bool CanProcess(Type inputType)
         {
@@ -60,7 +60,7 @@ namespace Wosylus.UniView.Binding.Content.Processors
                 base.Process(content, process);
                 return;
             }
-            
+
             var output = Process(match);
             process.ContinueWith(output);
         }
@@ -68,17 +68,17 @@ namespace Wosylus.UniView.Binding.Content.Processors
         protected abstract TOut Process(TIn1 input);
     }
     
-    public abstract class ViewContentProcessor<TIn1, TIn2, TOut> : ViewContentProcessor<TIn2, TOut>
+    public abstract class ViewContentProcessor<TOut, TIn1, TIn2> : ViewContentProcessor<TOut, TIn1>
     {
         public override bool CanProcess(Type inputType)
         {
-            return typeof(TIn1).IsAssignableFrom(inputType)
+            return typeof(TIn2).IsAssignableFrom(inputType)
                    || base.CanProcess(inputType);
         }
 
         public override void Process<T>(T content, IContentProcess process)
         {
-            if (content is not TIn1 match)
+            if (content is not TIn2 match)
             {
                 base.Process(content, process);
                 return;
@@ -88,20 +88,20 @@ namespace Wosylus.UniView.Binding.Content.Processors
             process.ContinueWith(output);
         }
 
-        protected abstract TOut Process(TIn1 input);
+        protected abstract TOut Process(TIn2 input);
     }
     
-    public abstract class ViewContentProcessor<TIn1, TIn2, TIn3, TOut> : ViewContentProcessor<TIn2, TIn3, TOut>
+    public abstract class ViewContentProcessor<TOut, TIn1, TIn2, TIn3> : ViewContentProcessor<TOut, TIn1, TIn2>
     {
         public override bool CanProcess(Type inputType)
         {
-            return typeof(TIn1).IsAssignableFrom(inputType)
+            return typeof(TIn3).IsAssignableFrom(inputType)
                    || base.CanProcess(inputType);
         }
 
         public override void Process<T>(T content, IContentProcess process)
         {
-            if (content is not TIn1 match)
+            if (content is not TIn3 match)
             {
                 base.Process(content, process);
                 return;
@@ -111,6 +111,6 @@ namespace Wosylus.UniView.Binding.Content.Processors
             process.ContinueWith(output);
         }
 
-        protected abstract TOut Process(TIn1 input);
+        protected abstract TOut Process(TIn3 input);
     }
 }
