@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using Wosylus.UniView;
 
 [RequireComponent(typeof(Text))]
-public class TestElement : ViewElement<string, int>
+public class TestElement : ViewElement<string, int, float>
 {
     protected override string InspectorPrefix => "Text";
     
@@ -23,7 +23,12 @@ public class TestElement : ViewElement<string, int>
         _displayedInt = content;
         return content.ToString();
     }
-
+    
+    protected override string Convert(float content)
+    {
+        return content.ToString("0.00");
+    }
+    
     public override void Clear()
     {
         _textRenderer.text = "";

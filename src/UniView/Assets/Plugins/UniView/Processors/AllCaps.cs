@@ -9,11 +9,7 @@ namespace Wosylus.UniView.Processors
         
         protected override string Process(string input)
         {
-            if (_mostRecentInput == input)
-                return _mostRecentOutput;
-            
-            _mostRecentInput = input.ToUpper();
-            return _mostRecentOutput;
+            return input.ToUpper();
         }
     }
 }
