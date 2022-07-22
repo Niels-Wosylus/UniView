@@ -25,8 +25,12 @@ namespace Wosylus.UniView
                 Clear();
                 return;
             }
-
+            
             OnClear(DisplayedContent);
+            foreach (var extender in GetComponents<ViewExtender>())
+            {
+                extender.OnDisplay(content);
+            }
             DisplayedContent = content;
             IsDisplayingContent = true;
             OnDisplay(content);
@@ -40,9 +44,15 @@ namespace Wosylus.UniView
             if (!IsDisplayingContent)
                 return;
 
-            if(DisplayedContent != null)
+            if (DisplayedContent != null)
+            {
+                foreach (var extender in GetComponents<ViewExtender>())
+                {
+                    extender.OnClear(DisplayedContent);
+                }
                 OnClear(DisplayedContent);
-            
+            }
+
             IsDisplayingContent = false;
             DisplayedContent = default;
             _binder.Clear();

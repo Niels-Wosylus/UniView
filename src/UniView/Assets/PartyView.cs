@@ -1,6 +1,6 @@
-﻿using Wosylus.UniView;
+﻿using UnityEngine;
+using Wosylus.UniView;
 using Wosylus.UniView.Binding;
-using Wosylus.UniView.Binding.Content.Processors;
 
 public class PartyView : View<PartyViewModel>
 {
@@ -14,7 +14,40 @@ public class PartyView : View<PartyViewModel>
 
     private void Start()
     {
-        var model = new PartyViewModel
+        var model = BuildModel();
+        Display(model);
+    }
+
+    [ContextMenu("Clear B")]
+    public void ClearB()
+    {
+        var model = BuildModel();
+        model.PersonB = null;
+        Display(model);
+    }
+    
+    [ContextMenu("Show All")]
+    public void ShowAll()
+    {
+        var model = BuildModel();
+        Display(model);
+    }
+
+    [ContextMenu("Show Null")]
+    public void ShowNull()
+    {
+        Display(null);
+    }
+    
+    [ContextMenu("Clear All")]
+    public void ClearAll()
+    {
+        Clear();
+    }
+
+    private PartyViewModel BuildModel()
+    {
+        return new PartyViewModel
         {
             PartyName = "Happy Party",
             PersonA = new TestViewModel
@@ -36,9 +69,6 @@ public class PartyView : View<PartyViewModel>
                 Age = 32
             }
         };
-        
-        
-        Display(model);
     }
 }
 
