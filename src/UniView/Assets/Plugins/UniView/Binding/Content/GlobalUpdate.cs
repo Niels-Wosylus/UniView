@@ -16,7 +16,7 @@ namespace Wosylus.UniView.Binding.Content
                 new GameObject().AddComponent<GlobalUpdate>();
 #else
             if (Updater == null)
-                new GameObject().AddComponent<GlobalViewUpdater>();
+                new GameObject().AddComponent<GlobalUpdate>();
 #endif
             return new Subscription(callback);
         }
@@ -27,6 +27,7 @@ namespace Wosylus.UniView.Binding.Content
                 Destroy(this);
             Updater = this;
             DontDestroyOnLoad(gameObject);
+            name = "Global View Updater";
         }
 
         private void Update()

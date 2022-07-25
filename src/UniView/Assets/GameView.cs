@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Wosylus.UniView;
 using Wosylus.UniView.Binding;
 
@@ -32,6 +33,12 @@ public class GameView : View<IGamePhase>
     public void ShowNo()
     {
         Display(new NoPhase());
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene("SampleScene");
     }
 }
 

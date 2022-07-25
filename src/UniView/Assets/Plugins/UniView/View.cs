@@ -59,6 +59,12 @@ namespace Wosylus.UniView
             DisplayedContent = default;
             _binder.Clear();
         }
+        
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _binder.Clear();
+        }
 
         protected abstract void Setup(ISetup<T> setup);
         

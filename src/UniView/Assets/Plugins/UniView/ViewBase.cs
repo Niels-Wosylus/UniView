@@ -24,7 +24,7 @@ namespace Wosylus.UniView
                 element.RegisterIn(registry);
             }
         }
-        
+
 #if UNITY_EDITOR
         public override void OnValidate()
         {
