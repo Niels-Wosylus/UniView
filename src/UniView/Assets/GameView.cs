@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Wosylus.UniView;
 using Wosylus.UniView.Binding;
 
@@ -8,6 +9,11 @@ public class GameView : View<IGamePhase>
     {
         setup.Content("Yes Phase", x => x as YesPhase);
         setup.Content("No Phase", x => x as NoPhase);
+    }
+
+    private void Start()
+    {
+        Display(new ThirdPhase());
     }
 
     [ContextMenu("Show Null")]
@@ -27,4 +33,9 @@ public class GameView : View<IGamePhase>
     {
         Display(new NoPhase());
     }
+}
+
+public class ThirdPhase : IGamePhase
+{
+    
 }

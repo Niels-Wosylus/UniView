@@ -75,6 +75,7 @@ namespace Wosylus.UniView
             Setup(_binder);
             RegisterElementsIn(_binder);
             OnInitialize();
+            ForceClear();
         }
         
         #region EDITOR
