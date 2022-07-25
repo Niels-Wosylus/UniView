@@ -115,6 +115,10 @@ namespace Wosylus.UniView
                     case T match:
                         _owner.Display(match);
                         break;
+                    
+                    default:
+                        _owner.Clear();
+                        break;
                 }
                 
                 process.EndedWith(this);

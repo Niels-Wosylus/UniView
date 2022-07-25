@@ -34,6 +34,10 @@ namespace Wosylus.UniView
                     case T match:
                         _owner.Display(match);
                         break;
+                    
+                    default:
+                        _owner.Clear();
+                        break;
                 }
                 
                 process.EndedWith(this);
@@ -80,6 +84,10 @@ namespace Wosylus.UniView
                     
                     case T1 match1:
                         _owner.Display(match1);
+                        break;
+                    
+                    default:
+                        _owner.Clear();
                         break;
                 }
                 
@@ -132,6 +140,10 @@ namespace Wosylus.UniView
                     
                     case T2 match2:
                         _owner.Display(match2);
+                        break;
+                    
+                    default:
+                        _owner.Clear();
                         break;
                 }
 

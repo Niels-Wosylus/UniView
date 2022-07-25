@@ -42,22 +42,19 @@ namespace Wosylus.UniView.Processors
             return EasedValue;
         }
 
-        protected override float Process(int input)
+        protected override float Convert(int input)
         {
-            TargetValue = input;
-            return EasedValue;
+            return input;
         }
 
-        protected override float Process(bool input)
+        protected override float Convert(bool input)
         {
-            TargetValue =  input ? _inputMax : _inputMin;
-            return EasedValue;
+            return input ? _inputMax : _inputMin;
         }
 
-        protected override float Process(double input)
+        protected override float Convert(double input)
         {
-            TargetValue = (float)input;
-            return EasedValue;
+            return (float)input;
         }
     }
 }

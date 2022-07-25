@@ -24,12 +24,6 @@ namespace Wosylus.UniView
 
         public void Consume<TContent>(TContent content)
         {
-            if (content == null)
-            {
-                Clear();
-                return;
-            }
-            
             EnsureProcessorChain();
             _processorChain.Process(content);
         }

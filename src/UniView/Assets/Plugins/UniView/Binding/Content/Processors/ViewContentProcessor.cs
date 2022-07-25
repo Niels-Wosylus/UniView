@@ -12,7 +12,6 @@ namespace Wosylus.UniView.Binding.Content.Processors
     
     public abstract class ViewContentProcessor : MonoBehaviour, IContentProcessor
     {
-        public virtual void Init(ViewElementBase owner) { }
         public abstract bool CanProcess(Type inputType);
         public abstract Type GetOutputType(Type inputType);
         public abstract void Process<T>(T content, IContentProcess process);
@@ -32,14 +31,14 @@ namespace Wosylus.UniView.Binding.Content.Processors
         
         public override void Process<T>(T content, IContentProcess process)
         {
-            if (content is not TOut input)
+            if (content is TOut input)
             {
-                process.EndedWith(this);
+                var output = Process(input);
+                process.ContinueWith(output);
                 return;
             }
             
-            var converted = Process(input);
-            process.ContinueWith(converted);
+            process.ContinueWith(content);
         }
 
         protected abstract TOut Process(TOut input);
@@ -61,11 +60,12 @@ namespace Wosylus.UniView.Binding.Content.Processors
                 return;
             }
 
-            var output = Process(match);
+            var converted = Convert(match);
+            var output = Process(converted);
             process.ContinueWith(output);
         }
 
-        protected abstract TOut Process(TIn1 input);
+        protected abstract TOut Convert(TIn1 input);
     }
     
     public abstract class ViewContentProcessor<TOut, TIn1, TIn2> : ViewContentProcessor<TOut, TIn1>
@@ -83,12 +83,13 @@ namespace Wosylus.UniView.Binding.Content.Processors
                 base.Process(content, process);
                 return;
             }
-            
-            var output = Process(match);
+
+            var converted = Convert(match);
+            var output = Process(converted);
             process.ContinueWith(output);
         }
 
-        protected abstract TOut Process(TIn2 input);
+        protected abstract TOut Convert(TIn2 input);
     }
     
     public abstract class ViewContentProcessor<TOut, TIn1, TIn2, TIn3> : ViewContentProcessor<TOut, TIn1, TIn2>
@@ -106,11 +107,12 @@ namespace Wosylus.UniView.Binding.Content.Processors
                 base.Process(content, process);
                 return;
             }
-            
-            var output = Process(match);
+
+            var converted = Convert(match);
+            var output = Process(converted);
             process.ContinueWith(output);
         }
 
-        protected abstract TOut Process(TIn3 input);
+        protected abstract TOut Convert(TIn3 input);
     }
 }
