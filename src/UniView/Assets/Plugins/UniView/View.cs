@@ -44,20 +44,22 @@ namespace Wosylus.UniView
             if (!IsDisplayingContent)
                 return;
 
-            if (DisplayedContent != null)
-            {
-                foreach (var extender in GetComponents<ViewExtender>())
-                {
-                    extender.OnClear(DisplayedContent);
-                }
-                OnClear(DisplayedContent);
-            }
+            ForceClear();
+        }
 
+        private void ForceClear()
+        {
+            OnClear(DisplayedContent);
+            foreach (var extender in GetComponents<ViewExtender>())
+            {
+                extender.OnClear(DisplayedContent);
+            }
+            
             IsDisplayingContent = false;
             DisplayedContent = default;
             _binder.Clear();
         }
-        
+
         protected abstract void Setup(ISetup<T> setup);
         
         protected virtual void OnInitialize() { }
@@ -72,7 +74,6 @@ namespace Wosylus.UniView
             _binder = new ViewBinder<T>();
             Setup(_binder);
             RegisterElementsIn(_binder);
-            _binder.Clear();
             OnInitialize();
         }
         
