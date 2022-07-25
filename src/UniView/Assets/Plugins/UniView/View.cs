@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Wosylus.UniView.Binding;
 using Wosylus.UniView.Binding.Content;
+using Wosylus.UniView.Binding.Content.Processors;
 
 namespace Wosylus.UniView
 {
@@ -11,17 +12,6 @@ namespace Wosylus.UniView
         public T DisplayedContent { get; private set; } = default;
         public bool IsDisplayingContent { get; private set; }
         private ViewBinder<T> _binder;
-
-        public override void Consume<TContent>(TContent content)
-        {
-            if(content is T match)
-                Display(match);
-        }
-        
-        public override bool CanConsume(Type contentType)
-        {
-            return typeof(T).IsAssignableFrom(contentType);
-        }
 
         public void Display(T content)
         {
@@ -35,8 +25,12 @@ namespace Wosylus.UniView
                 Clear();
                 return;
             }
-
+            
             OnClear(DisplayedContent);
+            foreach (var extender in GetComponents<ViewExtender>())
+            {
+                extender.OnDisplay(content);
+            }
             DisplayedContent = content;
             IsDisplayingContent = true;
             OnDisplay(content);
@@ -50,9 +44,15 @@ namespace Wosylus.UniView
             if (!IsDisplayingContent)
                 return;
 
-            if(DisplayedContent != null)
+            if (DisplayedContent != null)
+            {
+                foreach (var extender in GetComponents<ViewExtender>())
+                {
+                    extender.OnClear(DisplayedContent);
+                }
                 OnClear(DisplayedContent);
-            
+            }
+
             IsDisplayingContent = false;
             DisplayedContent = default;
             _binder.Clear();
@@ -62,7 +62,7 @@ namespace Wosylus.UniView
         
         protected virtual void OnInitialize() { }
         protected virtual void OnDisplay(T content) { }
-        protected virtual void OnClear(T clearedContent) { }
+        protected virtual void OnClear(T content) { }
 
         private void EnsureInitialization()
         {
@@ -89,64 +89,40 @@ namespace Wosylus.UniView
             Setup(_binder);
         }
         #endregion
-    }
-
-    public abstract class View<T, T1> : View<T>
-    {
-        public override void Consume<TContent>(TContent content)
+        
+        protected override IContentProcessor BuildContentProcessorFinalStep() => new FinalStep(this);
+        
+        private class FinalStep : IContentProcessor
         {
-            switch (content)
+            private readonly View<T> _owner;
+
+            public FinalStep(View<T> owner)
             {
-                case T match:
-                    Display(match);
-                    break;
+                _owner = owner;
+            }
+
+            public Type GetOutputType(Type inputType) => null;
+            
+            public bool CanProcess(Type inputType)
+            {
+                return typeof(T).IsAssignableFrom(inputType);
+            }
+
+            public void Process<TIn>(TIn content, IContentProcess process)
+            {
+                switch (content)
+                {
+                    case T match:
+                        _owner.Display(match);
+                        break;
+                    
+                    default:
+                        _owner.Clear();
+                        break;
+                }
                 
-                case T1 convertible:
-                    var converted = Convert(convertible);
-                    Display(converted);
-                    break;
+                process.EndedWith(this);
             }
         }
-        
-        public override bool CanConsume(Type contentType)
-        {
-            return typeof(T).IsAssignableFrom(contentType)
-                || typeof(T1).IsAssignableFrom(contentType);
-        }
-
-        protected abstract T Convert(T1 content);
-    }
-    
-    public abstract class View<T, T1, T2> : View<T>
-    {
-        public override void Consume<TContent>(TContent content)
-        {
-            switch (content)
-            {
-                case T match:
-                    Display(match);
-                    break;
-                
-                case T1 convertible1:
-                    var converted1 = Convert(convertible1);
-                    Display(converted1);
-                    break;
-                
-                case T2 convertible2:
-                    var converted2 = Convert(convertible2);
-                    Display(converted2);
-                    break;
-            }
-        }
-        
-        public override bool CanConsume(Type contentType)
-        {
-            return typeof(T).IsAssignableFrom(contentType)
-                   || typeof(T1).IsAssignableFrom(contentType)
-                   || typeof(T2).IsAssignableFrom(contentType);
-        }
-
-        protected abstract T Convert(T1 content);
-        protected abstract T Convert(T2 content);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Wosylus.UniView.Binding.Content
+﻿namespace Wosylus.UniView.Binding.Content
 {
     public interface IContentChannelSetup<T>
     {

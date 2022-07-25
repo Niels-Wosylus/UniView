@@ -11,7 +11,12 @@ namespace Wosylus.UniView.Binding.Content.Processors
     
     public class ContentProcessorChain : IContentProcessorChain
     {
-        private readonly List<IContentProcessor> _processors;
+        private readonly IList<IContentProcessor> _processors;
+
+        public ContentProcessorChain(IList<IContentProcessor> processors)
+        {
+            _processors = processors;
+        }
 
         public void Process<T>(T content)
         {

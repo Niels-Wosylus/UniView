@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using Wosylus.UniView.Binding;
+using Wosylus.UniView.Binding.Content.Processors;
 
-namespace Wosylus.UniView.Easers
+namespace Wosylus.UniView.Processors
 {
-    public class FloatEaser : View<float, int, bool>
+    public class FloatEaser : ViewContentProcessor<float, int, double, bool>
     {
         [Header("Input")]
         [SerializeField] private float _inputMin = 0f;
@@ -17,23 +17,8 @@ namespace Wosylus.UniView.Easers
 
         private float Output => _outputMin + _outputMax * (EasedValue - _inputMin) / (_inputMax - _inputMin);
         private float EasedValue { get; set; }
-        private float TargetValue => DisplayedContent;
+        private float TargetValue { get; set; }
         private float Speed => _speed * Time.unscaledDeltaTime;
-        
-        protected override void Setup(ISetup<float> setup)
-        {
-            setup.Content("Value", _ => Output).Continuously();
-        }
-
-        protected override float Convert(int content)
-        {
-            return content;
-        }
-
-        protected override float Convert(bool content)
-        {
-            return content ? _inputMax : _inputMin;
-        }
 
         private void Update()
         {
@@ -49,6 +34,27 @@ namespace Wosylus.UniView.Easers
                 if (EasedValue < TargetValue)
                     EasedValue = TargetValue;
             }
+        }
+
+        protected override float Process(float input)
+        {
+            TargetValue = input;
+            return EasedValue;
+        }
+
+        protected override float Convert(int input)
+        {
+            return input;
+        }
+
+        protected override float Convert(bool input)
+        {
+            return input ? _inputMax : _inputMin;
+        }
+
+        protected override float Convert(double input)
+        {
+            return (float)input;
         }
     }
 }

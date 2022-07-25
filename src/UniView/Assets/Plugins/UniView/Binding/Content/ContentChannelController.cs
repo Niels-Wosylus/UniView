@@ -54,6 +54,7 @@ namespace Wosylus.UniView.Binding.Content
         public void OnContentChanged(T content)
         {
             _content = content;
+            _isCleared = false;
         }
 
         public void OnClear()

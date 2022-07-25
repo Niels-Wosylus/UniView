@@ -9,6 +9,7 @@ namespace Wosylus.UniView.Elements
         protected override string InspectorPrefix => "Text";
         
         [SerializeField] private TextMeshProUGUI _textRenderer = default;
+        private string _displayedString;
         private int? _displayedInt;
         private float? _displayedFloat;
 
@@ -17,23 +18,25 @@ namespace Wosylus.UniView.Elements
             _textRenderer.text = content;
         }
 
-        public override void Display(int content)
+        protected override string Convert(int content)
         {
             if (_displayedInt == content)
-                return;
+                return _displayedString;
 
             _displayedInt = content;
-            _textRenderer.text = content.ToString();
+            _displayedFloat = null;
+            return content.ToString();
         }
 
-        public override void Display(float content)
+        protected override string Convert(float content)
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (content == _displayedFloat)
-                return;
+                return _displayedString;
 
+            _displayedInt = null;
             _displayedFloat = content;
-            _textRenderer.text = content.ToString("0.00");
+            return content.ToString("0.00");
         }
 
         public override void Clear()

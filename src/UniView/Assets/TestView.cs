@@ -23,12 +23,7 @@ public class TestView : View<TestViewModel>
     {
         Debug.Log(clickedName);
     }
-
-    private void Start()
-    {
-        DisplayCharles();
-    }
-
+    
     [ContextMenu("Display Charles")]
     private void DisplayCharles()
     {
