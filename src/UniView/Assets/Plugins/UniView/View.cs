@@ -72,6 +72,7 @@ namespace Wosylus.UniView
             _binder = new ViewBinder<T>();
             Setup(_binder);
             RegisterElementsIn(_binder);
+            _binder.Clear();
             OnInitialize();
         }
         
