@@ -34,7 +34,7 @@ namespace Wosylus.UniView
 
         private void SetElements()
         {
-            var elements = GetComponentsInChildren<ViewElementBase>()
+            var elements = GetComponentsInChildren<ViewElementBase>(true)
                 .Where(child => !ReferenceEquals(child, this))
                 .Where(child => ReferenceEquals(child.Parent, this));
 
