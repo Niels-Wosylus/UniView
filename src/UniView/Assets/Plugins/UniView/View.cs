@@ -62,7 +62,7 @@ namespace Wosylus.UniView
         
         protected virtual void OnInitialize() { }
         protected virtual void OnDisplay(T content) { }
-        protected virtual void OnClear(T clearedContent) { }
+        protected virtual void OnClear(T content) { }
 
         private void EnsureInitialization()
         {
