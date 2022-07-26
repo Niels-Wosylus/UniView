@@ -21,6 +21,7 @@ namespace Wosylus.UniView
         private IContentProcessorChain _processorChain;
 
         protected abstract string InspectorPrefix { get; }
+        protected virtual string InspectorSuffix => _source.Key;
 
         public void Consume<TContent>(TContent content)
         {
@@ -78,7 +79,7 @@ namespace Wosylus.UniView
                 return;
             
             if (!string.IsNullOrEmpty(InspectorPrefix))
-                name = $"[{InspectorPrefix}] {_source.Key}";
+                name = $"[{InspectorPrefix}] {InspectorSuffix}";
 
             Parent.OnValidate();
         }
