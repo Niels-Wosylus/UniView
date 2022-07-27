@@ -38,11 +38,9 @@ namespace Wosylus.UniView.Views
         private void CopyEntries(IEnumerable<T> target)
         {
             _entries.Clear();
-            var i = 0;
             foreach (var entry in target)
             {
-                _entries[i] = entry;
-                i++;
+                _entries.Add(entry);
             }
         }
         
@@ -78,6 +76,16 @@ namespace Wosylus.UniView.Views
         {
             _viewParent = transform;
             _children = GetComponentsInChildren<View<T>>().ToList();
+        }
+
+        public override void OnValidate()
+        {
+            base.OnValidate();
+
+            if (_viewPrefab == null)
+                return;
+            
+            EnsureCapacity(_prewarmAmount);
         }
     }
 }
