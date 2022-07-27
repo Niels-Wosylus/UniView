@@ -5,146 +5,79 @@ using Wosylus.UniView.Binding;
 
 namespace Wosylus.UniView.Views
 {
-    public readonly struct CollectionViewEventArgs<T> where T : class
-    {
-        public CollectionViewEventArgs(View<T> view)
-        {
-            View = view;
-        }
-
-        public readonly View<T> View;
-        
-        /// <summary>
-        /// Gets the object that the View displays
-        /// </summary>
-        public T Item => View?.DisplayedContent;
-    }
-    
     /// <summary>
     /// Displays a collection of items
     /// </summary>
     /// <typeparam name="T">The type of item to display</typeparam>
-    public abstract class CollectionView<T> : View<IList<T>> where T : class
+    public abstract class CollectionView<T> : View<IEnumerable<T>>
     {
-        // public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> ViewClicked;
-        // public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> HoveredViewChanged;
-        // public event ViewEventHandler<CollectionView<T>, CollectionViewEventArgs<T>> PressedViewChanged;
+        [SerializeField] private View<T> _viewPrefab = default;
+        [SerializeField] private Transform _viewParent = default;
+        [SerializeField] private List<View<T>> _children = default;
+        [SerializeField] private int _prewarmAmount = default;
 
-        public View<T> HoveredView { get; private set; }
-        public View<T> PressedView { get; private set; }
+        private readonly List<T> _entries = new List<T>();
 
-        public T HoveredItem => HoveredView?.DisplayedContent;
-        public T PressedItem => PressedView?.DisplayedContent;
-
-        
-        protected abstract IList<View<T>> Views { get; }
-
-        protected override void Setup(ISetup<IList<T>> setup) 
+        protected override void Setup(ISetup<IEnumerable<T>> setup) 
         {
         }
 
         protected override void OnInitialize()
         {
-            foreach (var view in Views)
-            {
-                // view.Clicked += ItemViewOnClicked;
-                // view.IsHoveredChanged += ItemViewOnIsHoveredChanged;
-                // view.IsPressedChanged += ItemViewOnIsPressedChanged;
-            }
+            base.OnInitialize();
+            EnsureCapacity(_prewarmAmount);
         }
 
-        protected override void OnDispose()
+        protected override void OnDisplay(IEnumerable<T> target)
         {
-            foreach (var view in Views)
-            {
-                // view.Clicked -= ItemViewOnClicked;
-                // view.IsHoveredChanged -= ItemViewOnIsHoveredChanged;
-                // view.IsPressedChanged -= ItemViewOnIsPressedChanged;
-            }
+            CopyEntries(target);
+            EnsureCapacity(_entries.Count);
+            RefreshViews();
         }
 
-        protected override void OnDisplay(IList<T> target)
+        private void CopyEntries(IEnumerable<T> target)
         {
-            var prevHoveredItem = HoveredItem;
-            var prevPressedItem = PressedItem;
-            
-            for (var i = 0; i < Views.Count; i++)
+            _entries.Clear();
+            var i = 0;
+            foreach (var entry in target)
             {
-                var view = Views[i];
-
-                if(i < target.Count)
-                    view.Display(target[i]);
-                else view.Clear();
-            }
-            
-            // if(HoveredItem != prevHoveredItem)
-            //     HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
-            //
-            // if(PressedItem != prevPressedItem)
-            //     PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
-        }
-
-        private void ItemViewOnIsHoveredChanged(object view, bool isHovered)
-        {
-            var entry = (View<T>) view;
-            if (isHovered)
-            {
-                if (HoveredView == entry) return;
-                HoveredView = entry;
-                //HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
-            }
-            else
-            {
-                if (HoveredView != entry) return;
-                HoveredView = null;
-                //HoveredViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(HoveredView));
+                _entries[i] = entry;
+                i++;
             }
         }
         
-        private void ItemViewOnIsPressedChanged(object view, bool isPressed)
+        private void EnsureCapacity(int capacity)
         {
-            var entry = (View<T>) view;
-            if (isPressed)
+            var deficit = capacity - _children.Count;
+            for (int i = 0; i < deficit; i++)
             {
-                if (PressedView == entry) return;
-                PressedView = entry;
-                //PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
-            }
-            else
-            {
-                if (PressedView != entry) return;
-                PressedView = null;
-                //PressedViewChanged?.Invoke(this, new CollectionViewEventArgs<T>(PressedView));
+                AddView();
             }
         }
 
-        // private void ItemViewOnClicked(object view, ClickedEventArgs info)
-        // {
-        //     var entry = (View<T>) view;
-        //     //ViewClicked?.Invoke(this, new CollectionViewEventArgs<T>(entry));
-        // }
-    }
+        private void AddView()
+        {
+            var newView = Instantiate(_viewPrefab, _viewParent);
+            _children.Add(newView);
+        }
 
-    /// <summary>
-    /// Displays a collection of items using a particular type of views
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TView"></typeparam>
-    public abstract class CollectionView<T, TView> : CollectionView<T>
-        where T : class
-        where TView : View<T>
-    {
-        [SerializeField] private List<View<T>> _views = default;
-        protected override IList<View<T>> Views => _views;
+        private void RefreshViews()
+        {
+            for (int i = 0; i < _entries.Count; i++)
+            {
+                _children[i].Display(_entries[i]);
+            }
+            
+            for (int i = _entries.Count; i < _children.Count; i++)
+            {
+                _children[i].Clear();
+            }
+        }
         
         private void Reset()
         {
-            FindChildViews();
-        }
-
-        private void FindChildViews()
-        {
-            _views = GetComponentsInChildren<View<T>>().ToList();
+            _viewParent = transform;
+            _children = GetComponentsInChildren<View<T>>().ToList();
         }
     }
 }
