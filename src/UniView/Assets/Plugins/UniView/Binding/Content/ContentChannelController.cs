@@ -5,7 +5,7 @@ namespace Wosylus.UniView.Binding.Content
     public interface IContentChannelController<T>
     {
         void Init(IContentChannel<T> channel);
-        void OnContentChanged(T content);
+        void OnInputChanged(T content);
         void OnClear();
         void Dispose();
     }
@@ -19,7 +19,7 @@ namespace Wosylus.UniView.Binding.Content
             _channel = channel;
         }
 
-        public void OnContentChanged(T content)
+        public void OnInputChanged(T content)
         {
             _channel.Update(content);
         }
@@ -51,7 +51,7 @@ namespace Wosylus.UniView.Binding.Content
             });
         }
 
-        public void OnContentChanged(T content)
+        public void OnInputChanged(T content)
         {
             _content = content;
             _isCleared = false;

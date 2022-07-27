@@ -10,7 +10,7 @@ namespace Wosylus.UniView.Binding.Content
 
     public interface IContentBroadcaster<T> : IDisplay<T>, IContentConsumerRegistry, IContentSource, IDisposable
     {
-        IContentChannelSetup<T> SetupContent<TExposed>(string key, Func<T, TExposed> function);
+        IContentChannelSetup<T, TExposed> SetupContent<TExposed>(string key, Func<T, TExposed> function);
         void OverrideContentChannelController(string key, IContentChannelController<T> controller);
     }
     
@@ -25,14 +25,14 @@ namespace Wosylus.UniView.Binding.Content
         private readonly HashSet<IContentChannelController<T>> _activeControllers
             = new HashSet<IContentChannelController<T>>();
 
-        public IContentChannelSetup<T> SetupContent<TExposed>(string key, Func<T, TExposed> function)
+        public IContentChannelSetup<T, TExposed> SetupContent<TExposed>(string key, Func<T, TExposed> function)
         {
             if (_channels.ContainsKey(key))
                 throw new Exception($"Key {key} is already being used to expose content");
 
             var channel = new ContentChannel<T, TExposed>(key, function);
             _channels.Add(key, channel);
-            return new ContentChannelSetup<T>(channel, this);
+            return new ContentChannelSetup<T, TExposed>(channel, this);
         }
 
         public void OverrideContentChannelController(string key, IContentChannelController<T> controller)
@@ -61,7 +61,7 @@ namespace Wosylus.UniView.Binding.Content
         {
             foreach (var controller in _activeControllers)
             {
-                controller.OnContentChanged(content);
+                controller.OnInputChanged(content);
             }
         }
 

@@ -18,7 +18,7 @@ namespace Wosylus.UniView.Binding
         private readonly ISignalBroadcaster _signalBroadcaster = new SignalBroadcaster();
         private readonly ISignalReceiver _signalReceiver = new SignalReceiver();
         
-        public IContentChannelSetup<T> Content<TExposed>(string key, Func<T, TExposed> function)
+        public IContentChannelSetup<T, TOut> Content<TOut>(string key, Func<T, TOut> function)
         {
             return _contentBroadcaster.SetupContent(key, function);
         }

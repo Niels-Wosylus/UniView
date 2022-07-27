@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Wosylus.UniView;
 using Wosylus.UniView.Binding;
@@ -11,6 +10,7 @@ public class GameView : View<IGamePhase>
         setup.Content("Yes Phase", x => x as YesPhase);
         setup.Content("No Phase", x => x as NoPhase);
     }
+    
 
     private void Start()
     {
