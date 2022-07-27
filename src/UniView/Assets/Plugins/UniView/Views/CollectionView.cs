@@ -82,9 +82,11 @@ namespace Wosylus.UniView.Views
         {
             base.OnValidate();
 
+            _children = _children.Where(x => x != null).ToList();
+            
             if (_viewPrefab == null)
                 return;
-            
+
             EnsureCapacity(_prewarmAmount);
         }
     }
