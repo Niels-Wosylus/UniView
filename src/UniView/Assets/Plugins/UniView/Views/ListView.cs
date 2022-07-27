@@ -5,42 +5,75 @@ using Wosylus.UniView.Binding;
 
 namespace Wosylus.UniView.Views
 {
-/// <summary>
+    /// <summary>
     /// Displays a collection of items
     /// </summary>
     /// <typeparam name="T">The type of item to display</typeparam>
-    public abstract class ListView<T> : View<IList<T>>
+    public abstract class ListView<T> : View<IEnumerable<T>>
     {
         [SerializeField] private View<T> _viewPrefab = default;
         [SerializeField] private Transform _viewParent = default;
         [SerializeField] private List<View<T>> _children = default;
+        [SerializeField] private int _prewarmAmount = default;
 
-        protected override void Setup(ISetup<IList<T>> setup) 
+        private readonly List<T> _entries = new List<T>();
+
+        protected override void Setup(ISetup<IEnumerable<T>> setup) 
         {
         }
 
-        protected override void OnDisplay(IList<T> target)
+        protected override void OnInitialize()
         {
-            if (target.Count > _children.Count)
+            base.OnInitialize();
+            EnsureCapacity(_prewarmAmount);
+        }
+
+        protected override void OnDisplay(IEnumerable<T> target)
+        {
+            CopyEntries(target);
+            EnsureCapacity(_entries.Count);
+            RefreshViews();
+        }
+
+        private void CopyEntries(IEnumerable<T> target)
+        {
+            _entries.Clear();
+            var i = 0;
+            foreach (var entry in target)
             {
-                var difference = target.Count - _children.Count;
-                for (int i = 0; i < difference; i++)
-                {
-                    var newView = Instantiate(_viewPrefab, _viewParent);
-                    _children.Add(newView);
-                }
+                _entries[i] = entry;
+                i++;
+            }
+        }
+        
+        private void EnsureCapacity(int capacity)
+        {
+            var deficit = capacity - _children.Count;
+            for (int i = 0; i < deficit; i++)
+            {
+                AddView();
+            }
+        }
+
+        private void AddView()
+        {
+            var newView = Instantiate(_viewPrefab, _viewParent);
+            _children.Add(newView);
+        }
+
+        private void RefreshViews()
+        {
+            for (int i = 0; i < _entries.Count; i++)
+            {
+                _children[i].Display(_entries[i]);
             }
             
-            for (var i = 0; i < _children.Count; i++)
+            for (int i = _entries.Count; i < _children.Count; i++)
             {
-                var view = _children[i];
-
-                if(i < target.Count)
-                    view.Display(target[i]);
-                else view.Clear();
+                _children[i].Clear();
             }
         }
-
+        
         private void Reset()
         {
             _viewParent = transform;
