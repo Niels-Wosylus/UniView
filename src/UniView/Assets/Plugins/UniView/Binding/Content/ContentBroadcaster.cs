@@ -19,7 +19,7 @@ namespace Wosylus.UniView.Binding.Content
         private readonly Dictionary<string, IContentChannel<T>> _channels 
             = new Dictionary<string, IContentChannel<T>>();
         
-        private readonly Dictionary<string, IContentChannelController<T>> _controllers
+        private readonly Dictionary<string, IContentChannelController<T>> _controllerOverrides
             = new Dictionary<string, IContentChannelController<T>>();
 
         private readonly HashSet<IContentChannelController<T>> _activeControllers
@@ -37,7 +37,7 @@ namespace Wosylus.UniView.Binding.Content
 
         public void OverrideContentChannelController(string key, IContentChannelController<T> controller)
         {
-            _controllers[key] = controller;
+            _controllerOverrides[key] = controller;
         }
 
         public void Register(IContentConsumer consumer, string key)
@@ -45,10 +45,10 @@ namespace Wosylus.UniView.Binding.Content
             if (!_channels.ContainsKey(key))
                 throw new Exception($"Cannot register consumer, key {key} is not exposed");
             
-            if(!_controllers.ContainsKey(key))
-                _controllers.Add(key, new ContentChannelController<T>());
+            if(!_controllerOverrides.ContainsKey(key))
+                _controllerOverrides.Add(key, new ContentChannelController<T>());
 
-            var controller = _controllers[key];
+            var controller = _controllerOverrides[key];
             if (!_activeControllers.Contains(controller))
                 _activeControllers.Add(controller);
 
