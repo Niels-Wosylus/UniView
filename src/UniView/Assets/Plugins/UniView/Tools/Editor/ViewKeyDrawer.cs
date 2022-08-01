@@ -29,7 +29,6 @@ namespace Wosylus.UniView.Tools.Editor
                 choiceIndex = EditorGUI.Popup(position, label.text, choiceIndex, choiceStrings);
                 var key = choices[choiceIndex];
                 key.AssignToProperty(property);
-                Debug.Log("Selected " + key);
             }
 
             EditorGUI.EndProperty();
