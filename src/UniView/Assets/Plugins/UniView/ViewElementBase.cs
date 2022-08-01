@@ -77,8 +77,11 @@ namespace Wosylus.UniView
             
             if (Parent == null)
                 return;
+
+            if (Parent == this)
+                return;
             
-            if (!string.IsNullOrEmpty(InspectorPrefix))
+            if (!string.IsNullOrEmpty(InspectorPrefix) && !string.IsNullOrEmpty(InspectorSuffix))
                 name = $"[{InspectorPrefix}] {InspectorSuffix}";
 
             Parent.OnValidate();

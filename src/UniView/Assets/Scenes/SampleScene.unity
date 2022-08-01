@@ -1154,7 +1154,7 @@ GameObject:
   - component: {fileID: 673428690}
   - component: {fileID: 673428691}
   m_Layer: 5
-  m_Name: '[View] Party'
+  m_Name: '[View] Party VIew'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

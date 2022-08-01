@@ -33,7 +33,12 @@ namespace Wosylus.UniView
         {
             return HashCode.Combine(Key, Source);
         }
-        
+
+        public override string ToString()
+        {
+            return _source == null ? "--none--" : $"{_source.name} -> {_key}";
+        }
+
 #if UNITY_EDITOR
         public void AssignToProperty(SerializedProperty property)
         {

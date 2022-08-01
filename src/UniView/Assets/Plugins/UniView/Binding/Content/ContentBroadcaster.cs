@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Wosylus.UniView.Binding.Content
 {
@@ -43,8 +44,11 @@ namespace Wosylus.UniView.Binding.Content
         public void Register(IContentConsumer consumer, string key)
         {
             if (!_channels.ContainsKey(key))
-                throw new Exception($"Cannot register consumer, key {key} is not exposed");
-            
+            {
+                Debug.LogWarning($"Cannot register consumer, key {key} is not exposed");
+                return;
+            }
+
             if(!_controllerOverrides.ContainsKey(key))
                 _controllerOverrides.Add(key, new ContentChannelController<T>());
 
