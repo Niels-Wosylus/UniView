@@ -15,6 +15,7 @@ namespace Wosylus.UniView.Elements
 
         public override void Display(string content)
         {
+            _displayedString = content;
             _textRenderer.text = content;
         }
 
@@ -41,6 +42,7 @@ namespace Wosylus.UniView.Elements
 
         public override void Clear()
         {
+            _displayedString = "";
             _textRenderer.text = "";
             _displayedInt = null;
             _displayedFloat = null;
