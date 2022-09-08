@@ -17,7 +17,7 @@ namespace Wosylus.UniView
         {
             EnsureInitialization();
 
-            if (EqualityComparer.Equals(content, DisplayedContent))
+            if (ContentIsEqual(content, DisplayedContent))
                 return;
             
             if (content == null)
@@ -71,6 +71,11 @@ namespace Wosylus.UniView
         protected virtual void OnInitialize() { }
         protected virtual void OnDisplay(T content) { }
         protected virtual void OnClear(T content) { }
+        
+        protected virtual bool ContentIsEqual(T newContent, T displayedContent)
+        {
+            return EqualityComparer.Equals(newContent, displayedContent);
+        }
 
         private void EnsureInitialization()
         {

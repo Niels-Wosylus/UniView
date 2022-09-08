@@ -35,6 +35,21 @@ namespace Wosylus.UniView.Views
             RefreshViews();
         }
 
+        protected override bool ContentIsEqual(IEnumerable<T> newContent, IEnumerable<T> displayedContent)
+        {
+            var i = 0;
+            foreach (var content in newContent)
+            {
+                var current = _entries[i];
+                if (!EqualityComparer<T>.Default.Equals(content, current))
+                    return false;
+                
+                i++;
+            }
+            
+            return i == _entries.Count;
+        }
+
         private void CopyEntries(IEnumerable<T> target)
         {
             _entries.Clear();
