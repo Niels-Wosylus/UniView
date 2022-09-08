@@ -40,6 +40,9 @@ namespace Wosylus.UniView.Views
             var i = 0;
             foreach (var content in newContent)
             {
+                if (i >= _entries.Count)
+                    return false;
+                
                 var current = _entries[i];
                 if (!EqualityComparer<T>.Default.Equals(content, current))
                     return false;
