@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace Wosylus.UniView.Tools.Editor
@@ -19,3 +20,4 @@ namespace Wosylus.UniView.Tools.Editor
         }
     }
 }
+#endif

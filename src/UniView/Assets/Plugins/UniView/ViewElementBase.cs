@@ -70,9 +70,10 @@ namespace Wosylus.UniView
             _processorChain = new ContentProcessorChain(preprocessors);
         }
 
-#if UNITY_EDITOR
+
         public virtual void OnValidate()
         {
+#if UNITY_EDITOR
             _preprocessors = GetComponents<ViewContentProcessor>();
             
             if (Parent == null)
@@ -85,7 +86,7 @@ namespace Wosylus.UniView
                 name = $"[{InspectorPrefix}] {InspectorSuffix}";
 
             Parent.OnValidate();
-        }
 #endif
+        }
     }
 }
