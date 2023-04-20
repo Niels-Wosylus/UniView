@@ -63,7 +63,7 @@ namespace Wosylus.UniView
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            _binder?.Clear();
+            _binder?.Dispose();
         }
 
         protected abstract void Setup(ISetup<T> setup);

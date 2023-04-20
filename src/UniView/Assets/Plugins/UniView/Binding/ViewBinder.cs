@@ -7,7 +7,7 @@ namespace Wosylus.UniView.Binding
 {
     public interface IViewBinder<T> : ISetup<T>, 
         IDisplay<T>, IContentConsumerRegistry, IContentSource, 
-        ISignalSource, ISignalConsumer
+        ISignalSource, ISignalConsumer, IDisposable
     {
         
     }
@@ -66,6 +66,12 @@ namespace Wosylus.UniView.Binding
         public bool CanConsume(string key, Type signalType)
         {
             return _signalReceiver.CanConsume(key, signalType);
+        }
+
+        public void Dispose()
+        {
+            _contentBroadcaster?.Clear();
+            _contentBroadcaster?.Dispose();
         }
     }
 }
