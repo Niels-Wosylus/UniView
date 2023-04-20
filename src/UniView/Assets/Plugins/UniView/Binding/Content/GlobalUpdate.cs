@@ -8,6 +8,11 @@ namespace Wosylus.UniView.Binding.Content
     {
         private static GlobalUpdate Updater { get; set; }
         private static readonly List<Action> Callbacks = new List<Action>(128); 
+        
+        public static void Clear()
+        {
+            Callbacks.Clear();
+        }
 
         public static IDisposable Register(Action callback)
         {
