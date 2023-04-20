@@ -9,7 +9,10 @@ namespace Wosylus.UniView.Binding.Content
         private static GlobalUpdate Updater { get; set; }
         private static readonly List<Action> Callbacks = new List<Action>(128); 
         
-        public static void Clear()
+        /// <summary>
+        /// Forces to clear all callbacks. This is a hack to fix a bug where callbacks to destroyed consumers linger.
+        /// </summary>
+        public static void HackReset()
         {
             Callbacks.Clear();
         }
