@@ -7,8 +7,9 @@ namespace Wosylus.UniView.Binding.Content
     public class GlobalUpdate : MonoBehaviour
     {
         private static GlobalUpdate Updater { get; set; }
-        private static readonly List<Action> Callbacks = new List<Action>(128); 
-        
+        private static readonly List<Subscription> Callbacks = new List<Subscription>(128); 
+        private static readonly List<Subscription> ToRemove = new List<Subscription>(128);
+
         /// <summary>
         /// Forces to clear all callbacks. This is a hack to fix a bug where callbacks to destroyed consumers linger.
         /// </summary>
@@ -40,10 +41,27 @@ namespace Wosylus.UniView.Binding.Content
 
         private void Update()
         {
+            for (var i = 0; i < ToRemove.Count; i++)
+            {
+                var callback = ToRemove[i];
+                Callbacks.Remove(callback);
+            }
+            
+            ToRemove.Clear();
+            
             for (var i = 0; i < Callbacks.Count; i++)
             {
                 var callback = Callbacks[i];
-                callback.Invoke();
+                
+                try
+                {
+                    callback.Invoke();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Exception in global update callback, removed callback.\n{e}");
+                    callback.Dispose();
+                }
             }
         }
 
@@ -54,8 +72,16 @@ namespace Wosylus.UniView.Binding.Content
 
             public Subscription(Action callback)
             {
-                Callbacks.Add(callback);
+                Callbacks.Add(this);
                 _callback = callback;
+            }
+            
+            public void Invoke()
+            {
+                if (_isDisposed)
+                    return;
+                
+                _callback.Invoke();
             }
             
             public void Dispose()
@@ -63,7 +89,8 @@ namespace Wosylus.UniView.Binding.Content
                 if (_isDisposed)
                     return;
                 
-                Callbacks.Remove(_callback);
+                _isDisposed = true;
+                ToRemove.Add(this);
             }
         }
     }
