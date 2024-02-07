@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Wosylus.UniView.Binding.Content;
 using Wosylus.UniView.Binding.Signals;
 
@@ -14,13 +15,18 @@ namespace Wosylus.UniView.Binding
     
     public class ViewBinder<T> : IViewBinder<T>
     {
-        private readonly IContentBroadcaster<T> _contentBroadcaster = new ContentBroadcaster<T>();
+        private readonly IContentBroadcaster<T> _contentBroadcaster;
         private readonly ISignalBroadcaster _signalBroadcaster = new SignalBroadcaster();
         private readonly ISignalReceiver _signalReceiver = new SignalReceiver();
-        
+
         public IContentChannelSetup<T, TOut> Content<TOut>(string key, Func<T, TOut> function)
         {
             return _contentBroadcaster.SetupContent(key, function);
+        }
+        
+        public ViewBinder(MonoBehaviour context)
+        {
+            _contentBroadcaster= new ContentBroadcaster<T>(context);
         }
 
         public void Input<TSignal>(string key, Action<TSignal> handler)

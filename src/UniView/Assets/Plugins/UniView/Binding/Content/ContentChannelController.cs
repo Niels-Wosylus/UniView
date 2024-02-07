@@ -1,10 +1,11 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Wosylus.UniView.Binding.Content
 {
     public interface IContentChannelController<T>
     {
-        void Init(IContentChannel<T> channel);
+        void Init(IContentChannel<T> channel, MonoBehaviour context);
         void OnInputChanged(T content);
         void OnClear();
         void Dispose();
@@ -13,10 +14,12 @@ namespace Wosylus.UniView.Binding.Content
     public class ContentChannelController<T> : IContentChannelController<T>
     {
         private IContentChannel<T> _channel;
+        private MonoBehaviour _context;
 
-        public void Init(IContentChannel<T> channel)
+        public void Init(IContentChannel<T> channel, MonoBehaviour context)
         {
             _channel = channel;
+            _context = context;
         }
 
         public void OnInputChanged(T content)
@@ -34,21 +37,19 @@ namespace Wosylus.UniView.Binding.Content
         }
     }
 
-    public class RefreshContinuously<T> : IContentChannelController<T>
+    public class RefreshContinuously<T> : IContentChannelController<T>, IGlobalUpdateCallback
     {
+        private MonoBehaviour _context;
         private IContentChannel<T> _channel;
         private IDisposable _subscription;
         private T _content;
         private bool _isCleared;
         
-        public void Init(IContentChannel<T> channel)
+        public void Init(IContentChannel<T> channel, MonoBehaviour context)
         {
             _channel = channel;
-            _subscription = GlobalUpdate.Register(() =>
-            {
-                if(!_isCleared)
-                    _channel.Update(_content);
-            });
+            _context = context;
+            _subscription = GlobalUpdate.Register(this, _context);
         }
 
         public void OnInputChanged(T content)
@@ -66,6 +67,12 @@ namespace Wosylus.UniView.Binding.Content
         public void Dispose()
         {
             _subscription.Dispose();
+        }
+
+        public void Execute()
+        {
+            if(!_isCleared)
+                _channel.Update(_content);
         }
     }
 }

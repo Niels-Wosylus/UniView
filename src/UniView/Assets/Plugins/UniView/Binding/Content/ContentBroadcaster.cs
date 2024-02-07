@@ -26,6 +26,13 @@ namespace Wosylus.UniView.Binding.Content
         private readonly HashSet<IContentChannelController<T>> _activeControllers
             = new HashSet<IContentChannelController<T>>();
 
+        private readonly MonoBehaviour _context;
+        
+        public ContentBroadcaster(MonoBehaviour context)
+        {
+            _context = context;
+        }
+
         public IContentChannelSetup<T, TExposed> SetupContent<TExposed>(string key, Func<T, TExposed> function)
         {
             if (_channels.ContainsKey(key))
@@ -49,16 +56,14 @@ namespace Wosylus.UniView.Binding.Content
                 return;
             }
 
-            if(!_controllerOverrides.ContainsKey(key))
-                _controllerOverrides.Add(key, new ContentChannelController<T>());
+            _controllerOverrides.TryAdd(key, new ContentChannelController<T>());
 
             var controller = _controllerOverrides[key];
-            if (!_activeControllers.Contains(controller))
-                _activeControllers.Add(controller);
+            _activeControllers.Add(controller);
 
             var channel = _channels[key];
             channel.RegisterConsumer(consumer);
-            controller.Init(channel);
+            controller.Init(channel, _context);
         }
 
         public void Display(T content)

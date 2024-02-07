@@ -82,7 +82,7 @@ namespace Wosylus.UniView
             if (_binder != null)
                 return;
             
-            _binder = new ViewBinder<T>();
+            _binder = new ViewBinder<T>(this);
             Setup(_binder);
             RegisterElementsIn(_binder);
             OnInitialize();
@@ -99,7 +99,7 @@ namespace Wosylus.UniView
         private void EnsureBinder()
         {
             if (_binder != null) return;
-            _binder = new ViewBinder<T>();
+            _binder = new ViewBinder<T>(this);
             Setup(_binder);
         }
         #endregion

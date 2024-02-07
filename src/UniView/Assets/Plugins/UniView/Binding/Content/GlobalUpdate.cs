@@ -18,7 +18,7 @@ namespace Wosylus.UniView.Binding.Content
             Callbacks.Clear();
         }
 
-        public static IDisposable Register(Action callback)
+        public static IDisposable Register(IGlobalUpdateCallback callback, MonoBehaviour context)
         {
 #if UNITY_EDITOR
             if (Updater == null && Application.isPlaying)
@@ -27,7 +27,7 @@ namespace Wosylus.UniView.Binding.Content
             if (Updater == null)
                 new GameObject().AddComponent<GlobalUpdate>();
 #endif
-            return new Subscription(callback);
+            return new Subscription(callback, context);
         }
 
         private void Awake()
@@ -59,7 +59,8 @@ namespace Wosylus.UniView.Binding.Content
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Exception in global update callback, removed callback.\n{e}");
+                    var context = callback.Context;
+                    Debug.LogError($"Exception in global update callback, removed callback.\n{e}", context);
                     callback.Dispose();
                 }
             }
@@ -67,21 +68,23 @@ namespace Wosylus.UniView.Binding.Content
 
         private class Subscription : IDisposable
         {
-            private readonly Action _callback;
+            private readonly IGlobalUpdateCallback _callback;
+            public readonly MonoBehaviour Context;
             private bool _isDisposed;
 
-            public Subscription(Action callback)
+            public Subscription(IGlobalUpdateCallback callback, MonoBehaviour context)
             {
                 Callbacks.Add(this);
                 _callback = callback;
+                Context = context;
             }
-            
+
             public void Invoke()
             {
                 if (_isDisposed)
                     return;
                 
-                _callback.Invoke();
+                _callback.Execute();
             }
             
             public void Dispose()
