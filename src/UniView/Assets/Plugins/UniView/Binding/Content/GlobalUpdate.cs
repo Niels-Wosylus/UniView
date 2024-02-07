@@ -60,7 +60,8 @@ namespace Wosylus.UniView.Binding.Content
                 catch (Exception e)
                 {
                     var context = callback.Context;
-                    Debug.LogError($"Exception in global update callback, removed callback.\n{e}", context);
+                    var contextName = callback.ContextName;
+                    Debug.LogError($"Exception in global update callback, removed callback.\n{contextName}\n{e}", context);
                     callback.Dispose();
                 }
             }
@@ -70,6 +71,7 @@ namespace Wosylus.UniView.Binding.Content
         {
             private readonly IGlobalUpdateCallback _callback;
             public readonly MonoBehaviour Context;
+            public readonly string ContextName;
             private bool _isDisposed;
 
             public Subscription(IGlobalUpdateCallback callback, MonoBehaviour context)
@@ -77,6 +79,7 @@ namespace Wosylus.UniView.Binding.Content
                 Callbacks.Add(this);
                 _callback = callback;
                 Context = context;
+                ContextName = $"{context} from {context.name} in {context.gameObject.scene.name}";
             }
 
             public void Invoke()
